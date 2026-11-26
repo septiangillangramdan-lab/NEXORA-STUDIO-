@@ -1,0 +1,11 @@
+# Existing integrations (configure only if you use those modules)
+GEMINI_API_KEY=your_gemini_api_key
+GOOGLE_CLOUD_PROJECT=your_google_cloud_project_id
+VEO_BUCKET=your_google_cloud_storage_bucket
+GOOGLE_SERVICE_ACCOUNT_JSON={"type":"service_account","...":"..."}
+NEXORA_VIDEO_ACCESS_CODE=use-a-long-random-video-access-code
+
+# NEXORA v1.8.0 Cloud Center — Supabase
+SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+NEXORA_CLOUD_ACCESS_CODE=use-a-different-long-random-cloud-access-code

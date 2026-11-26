@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#101827" />
+  <title>NEXORA STUDIO v1.8.0 — Cloud Infrastructure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="Nexora Studio home">
+        <span class="brand-mark">N</span>
+        <span><b>NEXORA</b><small>STUDIO</small></span>
+      </a>
+
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="main-nav">
+        <button class="nav-item active" data-view="office"><span>▦</span> Kantor 3D</button>
+        <button class="nav-item" data-view="employees"><span>♙</span> Karyawan AI</button>
+        <button class="nav-item" data-view="production"><span>▶</span> Produksi</button>
+        <button class="nav-item" data-view="core"><span>⌘</span> NEXORA Core</button>
+        <button class="nav-item" data-view="brain"><span>✧</span> AI Brain</button>
+        <button class="nav-item" data-view="ai-lab"><span>◉</span> AI Agent Lab</button>
+        <button class="nav-item" data-view="autonomous"><span>⟲</span> Autonomous Studio</button>
+        <button class="nav-item" data-view="production-control"><span>✦</span> Production Control</button>
+        <button class="nav-item" data-view="composer"><span>▣</span> Video Composer</button>
+        <button class="nav-item" data-view="media"><span>✺</span> AI Media Lab</button>
+        <button class="nav-item" data-view="video"><span>▶</span> AI Video Lab</button>
+        <button class="nav-item" data-view="voice"><span>♫</span> Voice Studio</button>
+        <button class="nav-item" data-view="creative"><span>✦</span> Creative Production</button>
+        <button class="nav-item" data-view="styles"><span>✧</span> Style Studio</button>
+        <button class="nav-item" data-view="trends"><span>⌁</span> Global Trends</button>
+        <button class="nav-item" data-view="knowledge"><span>▤</span> Knowledge Center</button>
+        <button class="nav-item" data-view="memory"><span>◈</span> CEO Memory</button>
+        <button class="nav-item" data-view="cloud"><span>☁</span> Cloud Center</button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="owner-card">
+          <div class="owner-avatar">S</div>
+          <div><b>Septian</b><small>Chief Executive Officer</small></div>
+          <span class="online-dot"></span>
+        </div>
+        <div class="version-label">NEXORA STUDIO <span>v1.8.0</span></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">VIRTUAL COMPANY / INDONESIA</div>
+          <h1 id="page-title">Kantor Virtual</h1>
+        </div>
+        <div class="top-actions">
+          <div class="live-clock"><span class="pulse"></span><span id="clock">--:--:--</span><small>WAKTU LOKAL</small></div>
+          <button class="icon-button" id="sound-toggle" title="Suara">♫</button>
+          <button class="owner-button"><span class="owner-avatar small">S</span> Septian <span>⌄</span></button>
+        </div>
+      </header>
+
+      <section class="content" id="main-content">
+        <div class="welcome-row">
+          <div>
+            <p class="welcome-kicker">SELAMAT DATANG KEMBALI</p>
+            <h2>Selamat datang di <em>NEXORA.</em></h2>
+            <p class="muted">Pantau aktivitas kantor dan seluruh tim AI dari satu tempat.</p>
+          </div>
+          <div class="date-chip"><span>◷</span><span id="date-label">Memuat tanggal...</span></div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-icon purple">♙</div><div><span>Total Agent</span><strong id="stat-total">11</strong><small>Tim terdaftar</small></div></article>
+          <article class="stat-card"><div class="stat-icon green">⌁</div><div><span>Sedang bekerja</span><strong id="stat-working">4</strong><small>Aktif saat ini</small></div></article>
+          <article class="stat-card"><div class="stat-icon amber">☕</div><div><span>Sedang istirahat</span><strong id="stat-resting">3</strong><small>Recovery / break</small></div></article>
+          <article class="stat-card"><div class="stat-icon blue">▣</div><div><span>Proyek berjalan</span><strong>02</strong><small>Dalam tahap awal</small></div></article>
+        </div>
+
+        <div class="section-heading">
+          <div><h3 id="section-title">Live Office</h3><p id="section-subtitle">Lihat suasana kantor NEXORA STUDIO dalam bentuk 3D.</p></div>
+          <div class="view-controls">
+            <button class="soft-button" id="reset-camera">↺ Reset kamera</button>
+            <button class="primary-button" id="toggle-labels">Sembunyikan label</button>
+          </div>
+        </div>
+
+        <div class="office-layout" id="office-view">
+          <div class="scene-card">
+            <div class="scene-topline"><span class="live-pill"><i></i> LIVE SIMULATION</span><span class="scene-hint">Seret untuk memutar · Scroll untuk zoom</span></div>
+            <div id="office-canvas" class="office-canvas">
+              <div class="loading-scene" id="scene-loading"><div class="loader"></div><span>Menyiapkan kantor 3D...</span></div>
+            </div>
+            <div class="scene-legend">
+              <span><i class="legend-dot working"></i> Bekerja</span>
+              <span><i class="legend-dot resting"></i> Istirahat</span>
+              <span><i class="legend-dot idle"></i> Siaga</span>
+              <span class="legend-note">Klik karakter untuk melihat profil</span>
+            </div>
+          </div>
+          <div class="right-column">
+            <article class="panel room-panel">
+              <div class="panel-heading"><div><h3>Ruangan</h3><p>Pilih area kantor</p></div><span class="panel-menu">•••</span></div>
+              <div class="room-list">
+                <button class="room-item selected" data-room="all"><span class="room-emoji">🏢</span><span><b>Seluruh kantor</b><small>Overview</small></span><span class="room-arrow">›</span></button>
+                <button class="room-item" data-room="executive"><span class="room-emoji">👔</span><span><b>Executive Room</b><small>CEO & Director</small></span><span class="room-arrow">›</span></button>
+                <button class="room-item" data-room="research"><span class="room-emoji">🔎</span><span><b>Research Room</b><small>Riset & tren</small></span><span class="room-arrow">›</span></button>
+                <button class="room-item" data-room="creative"><span class="room-emoji">✍️</span><span><b>Creative Studio</b><small>Story & illustration</small></span><span class="room-arrow">›</span></button>
+                <button class="room-item" data-room="production"><span class="room-emoji">🎬</span><span><b>Production Room</b><small>Animation & editing</small></span><span class="room-arrow">›</span></button>
+                <button class="room-item" data-room="lounge"><span class="room-emoji">☕</span><span><b>Relaxation Lounge</b><small>Istirahat & rekreasi</small></span><span class="room-arrow">›</span></button>
+              </div>
+            </article>
+            <article class="panel activity-panel">
+              <div class="panel-heading"><div><h3>Aktivitas terkini</h3><p>Log simulasi kantor</p></div><span class="activity-live">● LIVE</span></div>
+              <div class="activity-list" id="activity-list">
+                <div class="activity-row"><span class="activity-icon purple-bg">✦</span><div><b>CEO Agent</b><p>Memeriksa rencana produksi mingguan.</p><small>Baru saja</small></div></div>
+                <div class="activity-row"><span class="activity-icon green-bg">⌁</span><div><b>Research Agent</b><p>Menganalisis topik cerita populer.</p><small>2 menit lalu</small></div></div>
+                <div class="activity-row"><span class="activity-icon amber-bg">☕</span><div><b>Artist Agent</b><p>Istirahat sejenak di lounge.</p><small>5 menit lalu</small></div></div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <section class="panel employee-section" id="employee-section">
+          <div class="panel-heading"><div><h3>Tim NEXORA</h3><p>Status dan aktivitas karyawan AI</p></div><button class="text-button" data-view="employees">Lihat semua →</button></div>
+          <div class="employee-grid" id="employee-grid"></div>
+        </section>
+
+        <div class="notice"><span>ⓘ</span><p><b>Prototype tahap awal.</b> Status dan aktivitas karyawan pada versi ini masih berupa simulasi antarmuka. Koneksi AI sungguhan, database, memori, dan sistem kuota akan ditambahkan pada tahap berikutnya.</p></div>
+      </section>
+
+      <section class="content style-content" id="style-view" hidden>
+        <div class="welcome-row">
+          <div><p class="welcome-kicker">VISUAL PRODUCTION SYSTEM</p><h2>Setiap cerita punya <em>gaya.</em></h2><p class="muted">Pilih satu gaya, gabungkan beberapa gaya, atau biarkan AI menyarankan pendekatan visual.</p></div>
+          <div class="date-chip">✦ <span>STYLE ENGINE · PREVIEW</span></div>
+        </div>
+        <div class="style-intro panel"><div class="style-intro-icon">✧</div><div><b>Style Engine</b><p>Bangun identitas visual video NEXORA. Atur gaya per video atau per adegan tanpa mengunci seluruh studio pada satu tampilan.</p></div><span class="prototype-tag">UI PROTOTYPE</span></div>
+        <div class="style-toolbar"><div><h3>Mode produksi visual</h3><p>Pilih cara NEXORA menentukan gaya video.</p></div><div class="mode-switch" id="style-modes"><button class="mode-button active" data-mode="single">Single Style</button><button class="mode-button" data-mode="multi">Multi Style</button><button class="mode-button" data-mode="adaptive">AI Adaptive</button></div></div>
+        <div class="style-layout">
+          <div class="panel style-library-panel"><div class="panel-heading"><div><h3>Style Library</h3><p id="style-count">18 arah gaya visual · contoh tampilan hasil</p></div><input id="style-search" class="style-search" type="search" placeholder="Cari gaya..." aria-label="Cari gaya"></div><div class="style-categories" id="style-categories"><button class="category-chip active" data-category="all">Semua</button><button class="category-chip" data-category="2D">2D</button><button class="category-chip" data-category="3D">3D</button><button class="category-chip" data-category="Traditional">Tradisional</button><button class="category-chip" data-category="Art">Art & Craft</button></div><div class="style-grid" id="style-grid"></div></div>
+          <aside class="panel style-plan-panel"><div class="panel-heading"><div><h3>Rencana gaya video</h3><p>Susunan gaya per adegan</p></div><span class="draft-pill">DRAFT</span></div><label class="field-label" for="video-title">Nama proyek</label><input id="video-title" class="style-input" value="Kisah dari Nusantara"/><label class="field-label" for="video-duration">Durasi video</label><select id="video-duration" class="style-input"><option>30 detik</option><option selected>60 detik</option><option>90 detik</option><option>3 menit</option></select><div class="field-label">Mode aktif</div><div class="active-mode-label" id="active-mode-label">Single Style · satu gaya untuk seluruh video</div><div class="field-label timeline-label">Timeline adegan</div><div id="style-timeline" class="style-timeline"><div class="empty-timeline">Pilih gaya dari katalog untuk mulai menyusun adegan.</div></div><button class="primary-button full-button" id="add-scene-style">＋ Tambah gaya ke adegan</button><button class="soft-button full-button" id="clear-scene-styles">Bersihkan timeline</button><div class="style-hint">Catatan: timeline ini masih berupa rancangan interaktif. Pembuatan gambar, animasi, dan video AI belum terhubung.</div></aside>
+        </div>
+        <section class="output-gallery-section">
+          <div class="section-heading"><div><h3>Contoh hasil visual</h3><p>Perbedaan tampilan karya akhir, bukan sekadar filter warna.</p></div><span class="prototype-tag">VISUAL MOCKUP</span></div>
+          <div class="output-gallery" id="output-gallery">
+            <article class="output-card"><div class="art-scene art-2d"><i class="art-sun"></i><i class="art-hill one"></i><i class="art-hill two"></i><i class="art-house"></i><i class="art-person"></i><span class="art-caption">STORY FRAME 01</span></div><div class="output-card-copy"><b>2D Cartoon</b><small>Warna cerah, bentuk sederhana, karakter ekspresif.</small></div></article>
+            <article class="output-card"><div class="art-scene art-3d"><i class="art-sun"></i><i class="art-hill one"></i><i class="art-hill two"></i><i class="art-house"></i><i class="art-person"></i><span class="art-caption">STORY FRAME 02</span></div><div class="output-card-copy"><b>3D Animation</b><small>Volume, pencahayaan, material, dan kedalaman ruang.</small></div></article>
+            <article class="output-card"><div class="art-scene art-pixel"><i class="art-sun"></i><i class="art-hill one"></i><i class="art-hill two"></i><i class="art-house"></i><i class="art-person"></i><span class="art-caption">STORY FRAME 03</span></div><div class="output-card-copy"><b>Pixel Art</b><small>Visual tersusun dari blok piksel yang terlihat.</small></div></article>
+            <article class="output-card"><div class="art-scene art-wayang"><i class="art-sun"></i><i class="art-hill one"></i><i class="art-hill two"></i><i class="art-house"></i><i class="art-person"></i><span class="art-caption">STORY FRAME 04</span></div><div class="output-card-copy"><b>Wayang</b><small>Siluet, ornamen tradisional, dan nuansa panggung.</small></div></article>
+            <article class="output-card"><div class="art-scene art-water"><i class="art-sun"></i><i class="art-hill one"></i><i class="art-hill two"></i><i class="art-house"></i><i class="art-person"></i><span class="art-caption">STORY FRAME 05</span></div><div class="output-card-copy"><b>Watercolor</b><small>Tekstur lembut seperti sapuan cat air.</small></div></article>
+            <article class="output-card"><div class="art-scene art-comic"><i class="art-sun"></i><i class="art-hill one"></i><i class="art-hill two"></i><i class="art-house"></i><i class="art-person"></i><span class="art-caption">STORY FRAME 06</span></div><div class="output-card-copy"><b>Comic Art</b><small>Kontras tegas, outline, dan komposisi dramatis.</small></div></article>
+          </div>
+          <p class="visual-disclaimer">Contoh di atas adalah mockup visual antarmuka untuk memperlihatkan arah perbedaan gaya. Ini belum merupakan hasil render dari model AI.</p>
+        </section>
+        <section class="panel scene-builder-panel">
+          <div class="panel-heading"><div><h3>Scene & Character Planner</h3><p>Siapkan adegan dan identitas karakter sebelum proses generasi AI.</p></div><span class="draft-pill">LOCAL DRAFT</span></div>
+          <div class="scene-builder-grid">
+            <div><label class="field-label" for="scene-description">Deskripsi adegan</label><textarea id="scene-description" class="style-input scene-textarea" placeholder="Contoh: Seorang pengembara berjalan di desa berkabut saat matahari terbit..."></textarea><label class="field-label" for="scene-style-select">Gaya untuk adegan</label><select id="scene-style-select" class="style-input"><option>2D Cartoon</option><option>2D Anime</option><option>3D Animation</option><option>3D Realistic</option><option>Pixel Art</option><option>Voxel Art</option><option>Wayang</option><option>Watercolor</option><option>Comic Art</option></select><button type="button" class="primary-button full-button" id="add-story-scene">＋ Tambahkan ke storyboard</button></div>
+            <div class="character-form"><b>Character Memory · Draft</b><label class="field-label" for="character-name">Nama karakter</label><input id="character-name" class="style-input" placeholder="Contoh: Raka"><label class="field-label" for="character-look">Ciri visual tetap</label><textarea id="character-look" class="style-input scene-textarea short" placeholder="Rambut, pakaian, warna, aksesori, bentuk wajah..."></textarea><button type="button" class="soft-button full-button" id="save-character">Simpan profil karakter</button><p class="style-hint" id="character-status">Profil tersimpan hanya di sesi halaman ini. Database belum terhubung.</p></div>
+          </div>
+          <div class="storyboard-heading"><b>Storyboard adegan</b><span id="storyboard-count">0 adegan</span></div><div id="storyboard-list" class="storyboard-list"><div class="empty-timeline">Belum ada adegan. Tambahkan deskripsi untuk mulai menyusun storyboard.</div></div>
+        </section>
+        <div class="panel consistency-panel"><div class="consistency-mark">◈</div><div><b>Character & Style Memory</b><p>Rencana sistem untuk mempertahankan identitas karakter, pakaian, palet warna, dan properti saat gaya visual berubah. Profil di atas masih berupa draft lokal.</p></div><span class="planned-tag">BERTAHAP</span></div>
+      </section>
+
+      <section class="content production-content" id="production-view" hidden>
+        <div class="welcome-row"><div><p class="welcome-kicker">AI COMPANY OPERATIONS</p><h2>Production <em>Control Center.</em></h2><p class="muted">Atur proyek, pembagian tugas, dan alur kerja tim NEXORA dari satu tempat.</p></div><div class="date-chip">◉ <span>LOCAL WORKSPACE</span></div></div>
+        <div class="production-notice"><b>Mode prototype</b><span>Pengelolaan proyek dan status tugas berfungsi secara lokal di browser. Agent belum menjalankan pekerjaan AI sungguhan dan data belum tersinkron ke cloud.</span></div>
+        <div class="stats-grid production-stats">
+          <article class="stat-card"><div class="stat-icon purple">▣</div><div><span>Total proyek</span><strong id="pm-total-projects">0</strong><small>Dalam workspace</small></div></article>
+          <article class="stat-card"><div class="stat-icon green">✓</div><div><span>Tugas selesai</span><strong id="pm-done">0</strong><small>Sudah ditandai selesai</small></div></article>
+          <article class="stat-card"><div class="stat-icon amber">◷</div><div><span>Sedang berjalan</span><strong id="pm-active">0</strong><small>Tugas aktif</small></div></article>
+          <article class="stat-card"><div class="stat-icon blue">☷</div><div><span>Menunggu</span><strong id="pm-queued">0</strong><small>Belum dimulai</small></div></article>
+        </div>
+        <div class="production-grid">
+          <section class="panel project-create-panel"><div class="panel-heading"><div><h3>Buat proyek produksi</h3><p>Mulai dari topik atau ide video.</p></div><span class="draft-pill">NEW</span></div>
+            <form id="pm-project-form"><label class="field-label" for="pm-project-name">Nama proyek</label><input class="style-input" id="pm-project-name" required maxlength="70" placeholder="Contoh: Misteri kota yang hilang"/><label class="field-label" for="pm-project-type">Jenis konten</label><select class="style-input" id="pm-project-type"><option>Cerita misteri</option><option>Sejarah</option><option>Fakta unik</option><option>Inspiratif</option><option>Fiksi</option><option>Tren viral</option><option>Lainnya</option></select><label class="field-label" for="pm-project-brief">Brief / ide cerita</label><textarea class="style-input scene-textarea" id="pm-project-brief" placeholder="Tuliskan ringkasan ide, referensi, atau tujuan video..."></textarea><label class="field-label" for="pm-project-style">Gaya visual utama</label><select class="style-input" id="pm-project-style"><option>AI Adaptive</option><option>2D Cartoon</option><option>2D Anime</option><option>3D Animation</option><option>3D Realistic</option><option>Pixel Art</option><option>Voxel Art</option><option>Wayang</option><option>Comic Art</option><option>Watercolor</option></select><button class="primary-button full-button" type="submit">＋ Buat proyek & susun tugas</button></form>
+          </section>
+          <section class="panel project-list-panel"><div class="panel-heading"><div><h3>Daftar proyek</h3><p>Pilih proyek untuk melihat tugas produksinya.</p></div><span class="activity-live" id="pm-project-count">0 PROYEK</span></div><div id="pm-project-list" class="pm-project-list"><div class="empty-timeline">Belum ada proyek. Buat proyek pertama di formulir.</div></div></section>
+        </div>
+        <section class="panel task-board-panel"><div class="panel-heading"><div><h3>Production Task Board</h3><p id="pm-selected-project">Pilih atau buat proyek untuk melihat alur kerjanya.</p></div><button class="soft-button" id="pm-reset-demo" type="button">Reset demo</button></div><div class="task-board" id="pm-task-board"><div class="empty-timeline">Tugas produksi akan muncul di sini.</div></div></section>
+        <section class="panel pipeline-panel"><div class="panel-heading"><div><h3>Alur produksi standar</h3><p>Rangkaian pekerjaan yang akan dikelola AI CEO.</p></div><span class="planned-tag">PLANNED AI WORKFLOW</span></div><div class="pipeline-steps"><div><i>01</i><b>Research</b><small>Riset topik & sumber</small></div><span>→</span><div><i>02</i><b>Fact Check</b><small>Verifikasi informasi</small></div><span>→</span><div><i>03</i><b>Story & Script</b><small>Naskah dan narasi</small></div><span>→</span><div><i>04</i><b>Art & Animation</b><small>Visual dan gerakan</small></div><span>→</span><div><i>05</i><b>Voice & Edit</b><small>Audio dan penyuntingan</small></div><span>→</span><div><i>06</i><b>Quality Control</b><small>Pemeriksaan akhir</small></div></div></section>
+      </section>
+
+      <section class="content team-content" id="employee-view" hidden>
+        <div class="welcome-row"><div><p class="welcome-kicker">NEXORA PEOPLE & CULTURE</p><h2>Kenali tim <em>NEXORA.</em></h2><p class="muted">11 karyawan virtual dengan nama, kepribadian, tanggung jawab, dan aktivitas masing-masing.</p></div><div class="date-chip">♙ <span>11 TEAM MEMBERS</span></div></div>
+        <div class="team-summary"><div><strong>1</strong><span>CEO</span></div><div><strong>10</strong><span>Spesialis AI</span></div><div><strong>11</strong><span>Total anggota</span></div></div>
+        <div class="team-toolbar"><div><h3>Daftar karyawan</h3><p>Ketuk kartu untuk melihat profil. Status dapat diubah untuk simulasi.</p></div><input id="team-search" class="style-search" type="search" placeholder="Cari nama atau jabatan..." aria-label="Cari karyawan"></div>
+        <div class="team-grid" id="team-grid"></div>
+        <div class="prototype-note"><b>Catatan:</b> identitas dan pengaturan tim tersimpan di browser perangkat ini. Agent belum menjadi AI otonom dan belum menjalankan tugas sungguhan.</div>
+      </section>
+
+      <section class="content core-content" id="core-view" hidden>
+        <div class="welcome-row"><div><p class="welcome-kicker">NEXORA CORE SYSTEM</p><h2>Agent <em>Command Center.</em></h2><p class="muted">Pusat koordinasi, antrean kerja, komunikasi, dan pemantauan kuota tim.</p></div><div class="date-chip">⌘ <span>LOCAL CORE · v0.6.0</span></div></div>
+        <div class="production-notice"><b>Prototype lokal</b><span>Core ini menjalankan simulasi koordinasi dan menyimpan data di browser perangkat. Belum menghubungkan model AI, API provider, atau proses produksi otomatis sungguhan.</span></div>
+        <div class="core-stats"><div class="stat-card"><span>AGENT TERDAFTAR</span><b id="core-agent-count">11</b><small>CEO + spesialis</small></div><div class="stat-card"><span>TUGAS MENUNGGU</span><b id="core-queue-count">0</b><small>Dalam antrean</small></div><div class="stat-card"><span>SEDANG DIKERJAKAN</span><b id="core-working-count">0</b><small>Simulasi status</small></div><div class="stat-card"><span>LOG AKTIVITAS</span><b id="core-log-count">0</b><small>Riwayat lokal</small></div></div>
+        <div class="core-grid">
+          <section class="panel core-panel"><div class="panel-heading"><div><h3>Task Queue</h3><p>Tambahkan tugas; Core memilih spesialis berdasarkan kategori.</p></div><span class="draft-pill">AUTO ROUTING</span></div>
+            <form id="core-task-form"><label class="field-label" for="core-task-title">Nama tugas</label><input class="style-input" id="core-task-title" maxlength="100" required placeholder="Contoh: Riset cerita misteri lokal"><label class="field-label" for="core-task-type">Jenis pekerjaan</label><select class="style-input" id="core-task-type"><option value="research">Riset & tren</option><option value="fact">Pemeriksaan fakta</option><option value="story">Pengembangan cerita</option><option value="script">Penulisan naskah</option><option value="visual">Arahan visual</option><option value="art">Ilustrasi</option><option value="animation">Animasi</option><option value="voice">Voice over</option><option value="edit">Editing video</option><option value="qc">Quality control</option></select><label class="field-label" for="core-task-notes">Instruksi</label><textarea class="style-input scene-textarea short" id="core-task-notes" placeholder="Detail singkat tugas (opsional)"></textarea><button class="primary-button full-button" type="submit">＋ Masukkan ke antrean</button></form>
+            <div class="core-subhead"><b>Daftar tugas</b><button class="text-button" id="core-dispatch" type="button">Jalankan dispatch →</button></div><div class="core-queue" id="core-queue"></div>
+          </section>
+          <section class="panel core-panel"><div class="panel-heading"><div><h3>Agent Communication</h3><p>Catatan koordinasi antaranggota tim (simulasi).</p></div><span class="draft-pill">INTERNAL</span></div>
+            <form id="core-message-form"><label class="field-label" for="core-message-from">Pengirim</label><select class="style-input" id="core-message-from"></select><label class="field-label" for="core-message-to">Penerima</label><select class="style-input" id="core-message-to"></select><label class="field-label" for="core-message-body">Pesan</label><textarea class="style-input scene-textarea short" id="core-message-body" required maxlength="500" placeholder="Tulis arahan atau catatan koordinasi..."></textarea><button class="secondary-button full-button" type="submit">Kirim pesan internal</button></form><div class="core-subhead"><b>Log komunikasi</b><span class="muted">Terbaru di atas</span></div><div class="core-messages" id="core-messages"></div>
+          </section>
+        </div>
+        <div class="core-grid core-grid-bottom">
+          <section class="panel core-panel"><div class="panel-heading"><div><h3>Quota & Rest Monitor</h3><p>Atur status kuota secara manual untuk simulasi jeda kerja.</p></div></div><div id="core-quota-list" class="core-quota-list"></div></section>
+          <section class="panel core-panel"><div class="panel-heading"><div><h3>Work History</h3><p>Jejak perubahan status tugas dan koordinasi.</p></div><button class="text-button" id="core-clear-log" type="button">Bersihkan</button></div><div id="core-history" class="core-history"></div></section>
+        </div>
+      </section>
+      <section class="content brain-content" id="brain-view" hidden>
+        <div class="welcome-row"><div><p class="welcome-kicker">NEXORA INTELLIGENCE LAYER</p><h2>AI <em>Brain System.</em></h2><p class="muted">Pusat konteks, memori spesialis, dan penyusunan brief kerja untuk seluruh Agent.</p></div><div class="date-chip">✧ <span>BRAIN · v0.7.0</span></div></div>
+        <div class="production-notice"><b>Mode local knowledge</b><span>Brain menyimpan memori per Agent dan merangkainya menjadi context pack yang bisa disalin ke model AI. Belum ada model AI yang berpikir atau berdiskusi otomatis di dalam aplikasi.</span></div>
+        <div class="brain-stats"><div><b id="brain-memory-count">0</b><span>MEMORI AGENT</span></div><div><b id="brain-agent-count">11</b><span>PROFIL TERSEDIA</span></div><div><b id="brain-decision-count">0</b><span>BRIEF TERSIMPAN</span></div></div>
+        <div class="brain-grid">
+          <section class="panel brain-panel"><div class="panel-heading"><div><h3>Agent Knowledge Vault</h3><p>Pilih Agent untuk menyimpan prinsip, keahlian, dan konteks khusus.</p></div></div>
+            <label class="field-label" for="brain-agent">Pilih Agent</label><select class="style-input" id="brain-agent"></select>
+            <form id="brain-memory-form"><label class="field-label" for="brain-memory-type">Jenis memori</label><select class="style-input" id="brain-memory-type"><option>Keahlian</option><option>Kepribadian & gaya kerja</option><option>Aturan kerja</option><option>Preferensi</option><option>Pelajaran dari proyek</option><option>Konteks proyek</option></select><label class="field-label" for="brain-memory-title">Judul</label><input class="style-input" id="brain-memory-title" maxlength="90" required placeholder="Contoh: Standar riset sumber"/><label class="field-label" for="brain-memory-body">Isi memori</label><textarea class="style-input scene-textarea" id="brain-memory-body" required maxlength="2000" placeholder="Informasi yang perlu menjadi konteks Agent ini..."></textarea><button class="primary-button full-button">＋ Simpan memori Agent</button></form>
+            <div class="core-subhead"><b>Memori Agent terpilih</b><span id="brain-selected-count" class="muted">0 catatan</span></div><div id="brain-memory-list" class="brain-memory-list"></div>
+          </section>
+          <section class="panel brain-panel"><div class="panel-heading"><div><h3>Brief & Context Builder</h3><p>Susun instruksi proyek yang menyertakan memori relevan.</p></div><span class="draft-pill">CONTEXT PACK</span></div>
+            <form id="brain-brief-form"><label class="field-label" for="brain-project">Nama proyek / tujuan</label><input class="style-input" id="brain-project" required maxlength="140" placeholder="Contoh: Video misteri desa terpencil"/><label class="field-label" for="brain-goal">Hasil yang diharapkan</label><textarea class="style-input scene-textarea short" id="brain-goal" required maxlength="1200" placeholder="Jelaskan target, audiens, durasi, gaya visual, dan batasan..."></textarea><label class="field-label" for="brain-participants">Agent yang dilibatkan</label><select class="style-input" id="brain-participants" multiple size="6" aria-label="Pilih beberapa Agent"></select><button class="secondary-button full-button" type="submit">✧ Bangun Context Pack</button></form>
+            <div class="core-subhead"><b>Hasil Context Pack</b><button class="text-button" id="brain-copy" type="button">Salin teks</button></div><textarea class="style-input brain-output" id="brain-output" readonly placeholder="Context pack akan muncul di sini..."></textarea><div class="core-subhead"><b>Brief tersimpan</b></div><div id="brain-brief-list" class="brain-memory-list"></div>
+          </section>
+        </div>
+        <div class="prototype-note"><b>Privasi & batasan:</b> semua memori disimpan di localStorage browser ini. Jangan masukkan kata sandi, data pribadi sensitif, atau rahasia akun. Ekspor/sinkronisasi cloud dan integrasi API AI belum tersedia.</div>
+      </section>
+      <section class="content autonomous-content" id="autonomous-view" hidden>
+        <div class="welcome-row"><div><p class="welcome-kicker">SUPERVISED MULTI-AGENT PIPELINE</p><h2>Autonomous <em>Studio.</em></h2><p class="muted">Jalankan alur produksi teks berantai. Setiap tahap memakai Gemini dan meneruskan hasil tahap sebelumnya.</p></div><div class="date-chip">⟲ <span>CORE ORCHESTRATOR · v0.9.0</span></div></div>
+        <div class="production-notice"><b>Mode otonom dengan pengawasan</b><span>Agent bekerja berurutan, bukan berjalan di latar belakang. Kamu dapat menghentikan proses kapan saja. NEXORA belum otomatis mencari web, membuat aset gambar/audio/video, atau memublikasikan konten.</span></div>
+        <div class="autonomous-grid">
+          <section class="panel autonomous-panel"><div class="panel-heading"><div><h3>Brief produksi</h3><p>Masukkan tujuan video. Sistem akan mengorkestrasi 11 peran secara berurutan.</p></div><span class="draft-pill">11 STAGES</span></div>
+            <form id="auto-form"><label class="field-label" for="auto-title">Nama proyek</label><input class="style-input" id="auto-title" maxlength="100" required placeholder="Contoh: Misteri desa yang menghilang"><label class="field-label" for="auto-brief">Brief utama</label><textarea class="style-input scene-textarea" id="auto-brief" maxlength="5000" required placeholder="Jelaskan ide, target penonton, platform, durasi, gaya visual, batasan, dan tujuan video..."></textarea><label class="field-label" for="auto-extra">Referensi/konteks tambahan (opsional)</label><textarea class="style-input scene-textarea short" id="auto-extra" maxlength="2500" placeholder="Ringkasan referensi atau catatan. Jangan masukkan data pribadi atau API key."></textarea>
+            <div class="auto-actions"><button class="primary-button" id="auto-start" type="submit">▶ Mulai pipeline</button><button class="secondary-button" id="auto-stop" type="button" disabled>Hentikan</button><button class="secondary-button" id="auto-resume" type="button" disabled>Lanjutkan hasil tersimpan</button></div></form>
+            <div class="auto-progress-wrap"><div class="auto-progress-label"><b id="auto-progress-text">Belum dimulai</b><span id="auto-progress-count">0/11</span></div><div class="auto-progress"><i id="auto-progress-bar"></i></div></div>
+            <div id="auto-stage-list" class="auto-stage-list"></div>
+          </section>
+          <section class="panel autonomous-panel"><div class="panel-heading"><div><h3>Output pipeline</h3><p>Hasil tiap Agent disimpan di browser ini.</p></div><button class="text-button" id="auto-export" type="button">Ekspor hasil</button></div><div id="auto-current" class="auto-current">Pipeline belum dijalankan.</div><div class="auto-output-list" id="auto-output-list"></div></section>
+        </div>
+        <div class="prototype-note"><b>Biaya dan batas penggunaan:</b> satu pipeline dapat memanggil model hingga 11 kali. Setiap panggilan memakai kuota/token API dan dapat gagal karena rate limit atau biaya provider. Jalankan hanya ketika API key dan batas penggunaan sudah diatur. Hasil AI perlu diperiksa manusia, terutama klaim faktual dan materi sensitif.</div>
+      </section>
+      <section class="content media-content" id="media-view" hidden>
+        <div class="welcome-row"><div><p class="welcome-kicker">GENERATIVE MEDIA WORKSPACE</p><h2>AI Media <em>Lab.</em></h2><p class="muted">Aira membuat gambar adegan dengan model gambar Gemini. Simpan hasilnya ke Asset Library lalu kirim ke Video Composer.</p></div><div class="date-chip">✺ <span>IMAGE GENERATION · v1.2.0</span></div></div>
+        <div class="production-notice"><b>Generasi gambar AI sungguhan</b><span>Permintaan dikirim melalui Netlify Function. API key tetap berada di server. Model gambar dapat menggunakan kuota berbayar; periksa pengaturan billing dan batas penggunaan sebelum membuat gambar.</span></div>
+        <div class="media-grid">
+          <section class="panel media-panel">
+            <div class="panel-heading"><div><h3>Image Generator · Aira</h3><p>Ubah deskripsi adegan menjadi gambar baru.</p></div><span class="draft-pill">GEMINI IMAGE</span></div>
+            <label class="field-label" for="media-prompt">Prompt gambar</label><textarea class="style-input scene-textarea" id="media-prompt" maxlength="3500" placeholder="Contoh: Sebuah desa pegunungan di Jawa saat kabut pagi, rumah kayu tradisional, sinematik, detail lingkungan... "></textarea>
+            <label class="field-label" for="media-style">Gaya visual</label><select class="style-input" id="media-style"><option>2D cinematic animation</option><option>Anime</option><option>3D stylized animation</option><option>Voxel</option><option>Pixel art</option><option>Watercolor illustration</option><option>Wayang-inspired illustration</option><option>Comic book</option><option>Realistic documentary</option><option>AI Adaptive</option></select>
+            <label class="field-label" for="media-ratio">Komposisi</label><select class="style-input" id="media-ratio"><option value="9:16">Portrait 9:16 · Shorts</option><option value="16:9">Landscape 16:9 · YouTube</option><option value="1:1">Square 1:1</option></select>
+            <label class="field-label" for="media-negative">Hal yang dihindari (opsional)</label><input class="style-input" id="media-negative" maxlength="500" placeholder="Contoh: teks, watermark, anatomi tidak wajar..." />
+            <button class="primary-button full-button" id="media-generate" type="button">✦ Generate Image</button>
+            <div class="composer-hint" id="media-status">Siap. Pastikan GEMINI_API_KEY tersedia di Netlify.</div>
+          </section>
+          <section class="panel media-panel">
+            <div class="panel-heading"><div><h3>Generated Output</h3><p>Pratinjau gambar yang dihasilkan model.</p></div><span class="draft-pill" id="media-output-state">NO OUTPUT</span></div>
+            <div class="media-preview" id="media-preview"><div class="media-placeholder"><span>✺</span><b>Belum ada gambar</b><small>Hasil generasi akan tampil di sini.</small></div></div>
+            <div class="composer-actions"><button class="secondary-button" id="media-download" type="button" disabled>Unduh PNG</button><button class="secondary-button" id="media-send-composer" type="button" disabled>Kirim ke Video Composer</button></div>
+            <p class="composer-hint">Hasil yang disimpan akan masuk ke Asset Library Creative Production pada browser ini.</p>
+          </section>
+        </div>
+        <div class="prototype-note"><b>Batas fitur v1.2.0:</b> versi ini mengaktifkan generasi gambar AI. Pembuatan audio narasi dan video bergerak AI belum diaktifkan. Output gambar tergantung ketersediaan model, kuota, wilayah, dan pengaturan akun provider. Periksa hasil sebelum digunakan.</div>
+      </section>
+      <section class="content voice-content" id="voice-view" hidden>
+        <div class="welcome-row"><div><p class="welcome-kicker">VIONA · VOICE DEPARTMENT</p><h2>Voice <em>Studio.</em></h2><p class="muted">Viona dapat membuat file narasi WAV menggunakan Gemini TTS, atau memakai suara sistem perangkat untuk pratinjau cepat.</p></div><div class="date-chip">♫ <span>AI VOICE · v1.5.0</span></div></div>
+        <div class="production-notice"><b>AI Voice Generation</b><span>Teks narasi akan dikirim ke Google Gemini melalui fungsi server Netlify untuk dibuat menjadi audio. Jangan masukkan informasi pribadi atau rahasia. Ketersediaan model, kuota, dan biaya mengikuti pengaturan akun Google.</span></div>
+        <div class="voice-grid">
+          <section class="panel voice-panel"><div class="panel-heading"><div><h3>Narration Script</h3><p>Tulis atau tempel naskah Viona.</p></div><span class="draft-pill">SCRIPT</span></div>
+            <label class="field-label" for="voice-title">Judul narasi</label><input class="style-input" id="voice-title" maxlength="100" value="Narasi NEXORA" />
+            <label class="field-label" for="voice-script">Teks narasi</label><textarea class="style-input scene-textarea voice-script" id="voice-script" maxlength="3500" placeholder="Tuliskan naskah voice-over di sini..."></textarea>
+            <div class="voice-actions"><button class="secondary-button" id="voice-save" type="button">Simpan naskah</button><button class="secondary-button" id="voice-copy" type="button">Salin teks</button><button class="secondary-button" id="voice-send" type="button">Kirim ke Composer</button></div>
+          </section>
+          <section class="panel voice-panel"><div class="panel-heading"><div><h3>Gemini AI Voice</h3><p>Hasilkan narasi WAV dengan suara neural AI.</p></div><span class="draft-pill">CLOUD TTS</span></div>
+            <label class="field-label" for="voice-ai-select">Model suara</label><select class="style-input" id="voice-ai-select"><option value="gemini-3.8-flash-lite-tts">Gemini 3.8 Flash-Lite TTS · efisien</option><option value="gemini-3.8-flash-tts">Gemini 3.8 Flash TTS · kualitas studio</option></select>
+            <label class="field-label" for="voice-ai-voice">Karakter suara</label><select class="style-input" id="voice-ai-voice"><option>Kore</option><option>Zephyr</option><option>Puck</option><option>Charon</option><option>Fenrir</option><option>Leda</option><option>Orus</option><option>Aoede</option><option>Callirrhoe</option><option>Achernar</option><option>Achird</option><option>Algenib</option><option>Schedar</option></select>
+            <label class="field-label" for="voice-ai-style">Arahan penyampaian</label><input class="style-input" id="voice-ai-style" maxlength="300" value="Narasi bahasa Indonesia yang natural, jelas, hangat, dan ekspresif; tempo sedang." />
+            <label class="field-label" for="voice-ai-language">Bahasa</label><select class="style-input" id="voice-ai-language"><option value="Indonesian">Bahasa Indonesia</option><option value="English">English</option><option value="Javanese">Bahasa Jawa</option><option value="Malay">Bahasa Melayu</option></select>
+            <button class="primary-button full-button" id="voice-ai-generate" type="button">✦ Generate AI Voice</button>
+            <audio id="voice-ai-audio" controls hidden style="width:100%;margin-top:14px"></audio>
+            <div class="voice-actions"><button class="secondary-button" id="voice-ai-download" type="button" disabled>Unduh WAV</button><button class="secondary-button" id="voice-ai-send" type="button" disabled>Kirim audio ke Composer</button></div>
+            <p class="composer-hint" id="voice-status" aria-live="polite">Siap. Maksimum 3.500 karakter per generasi.</p>
+          </section>
+          <section class="panel voice-panel"><div class="panel-heading"><div><h3>Device Preview</h3><p>Pratinjau cepat dari suara Android/browser.</p></div><span class="draft-pill">LOCAL TTS</span></div>
+            <label class="field-label" for="voice-select">Suara perangkat</label><select class="style-input" id="voice-select"><option value="">Memuat suara…</option></select>
+            <div class="voice-control-row"><div><label class="field-label" for="voice-rate">Kecepatan</label><input id="voice-rate" type="range" min="0.7" max="1.3" step="0.05" value="1"></div><output id="voice-rate-value">1.00×</output></div>
+            <div class="voice-control-row"><div><label class="field-label" for="voice-pitch">Nada suara</label><input id="voice-pitch" type="range" min="0.7" max="1.3" step="0.05" value="1"></div><output id="voice-pitch-value">1.00</output></div>
+            <div class="voice-actions"><button class="secondary-button" id="voice-play" type="button">▶ Pratinjau perangkat</button><button class="secondary-button" id="voice-stop" type="button">■ Berhenti</button></div>
+            <p class="composer-hint">Pratinjau perangkat tidak menghasilkan file audio. Gunakan Gemini AI Voice untuk membuat WAV yang bisa diunduh.</p>
+          </section>
+        </div>
+        <div class="prototype-note"><b>Batas v1.5.0:</b> Gemini menghasilkan audio narasi WAV. Fitur ini belum melakukan cloning suara, sinkronisasi subtitle otomatis, atau dialog multi-speaker. Output perlu didengarkan dan diperiksa sebelum dipakai.</div>
+      </section>
+      <section class="content video-content" id="video-view" hidden>
+        <div class="welcome-row"><div><p class="welcome-kicker">KAIRO · MOTION DEPARTMENT</p><h2>AI Video <em>Lab.</em></h2><p class="muted">Buat klip video bergerak dari prompt, atau gunakan gambar awal sebagai referensi gerakan.</p></div><div class="date-chip">▶ <span>AI VIDEO · v1.7.0</span></div></div>
+        <div class="production-notice"><b>Cloud video generation</b><span>Permintaan dikirim ke Gemini Omni melalui Google Cloud Vertex AI. Proses dapat memerlukan beberapa menit. Video disimpan sementara di Google Cloud Storage dan tautan unduh berlaku 15 menit. Gunakan hanya gambar yang kamu miliki atau punya izin untuk digunakan.</span></div>
+        <div class="video-lab-grid">
+          <section class="panel video-panel">
+            <div class="panel-heading"><div><h3>Scene Direction</h3><p>Atur adegan yang akan dianimasikan Kairo.</p></div><span class="draft-pill">KAIRO / AI</span></div>
+            <label class="field-label" for="video-access-code">Kode akses AI Video Lab</label><input class="style-input" id="video-access-code" type="password" autocomplete="off" maxlength="100" placeholder="Masukkan kode akses yang disiapkan admin" />
+            <label class="field-label" for="video-prompt">Prompt adegan</label>
+            <textarea class="style-input video-prompt" id="video-prompt" maxlength="1800" placeholder="Contoh: Wide cinematic shot of a quiet Indonesian mountain village at dawn, mist drifting slowly between traditional houses, warm sunrise light, subtle camera push-in, natural movement, detailed 2D animation..."></textarea>
+            <label class="field-label" for="video-reference">Gambar referensi / frame pertama (opsional)</label>
+            <input class="style-input" id="video-reference" type="file" accept="image/png,image/jpeg,image/webp" />
+            <div class="video-reference-preview" id="video-reference-preview"><span>▧</span><small>Belum ada gambar referensi</small></div>
+            <div class="video-control-grid">
+              <div><label class="field-label" for="video-ratio">Rasio</label><select class="style-input" id="video-ratio"><option value="9:16">9:16 · Portrait</option><option value="16:9">16:9 · Landscape</option></select></div>
+              <div><label class="field-label" for="video-duration">Durasi</label><select class="style-input" id="video-duration"><option value="5">5 detik</option><option value="8">8 detik</option><option value="10">10 detik</option><option value="12">12 detik</option><option value="15">15 detik</option></select></div>
+            </div>
+            <button class="primary-button full-button" id="video-generate" type="button">✦ Generate AI Video</button>
+            <div class="video-job-status" id="video-job-status" aria-live="polite"><span class="video-status-dot"></span><span>Siap. Hubungkan Google Cloud terlebih dahulu untuk mulai.</span></div>
+            <div class="composer-hint">Model: Gemini Omni 1.2 Flash · Output: MP4 720p · Satu klip per permintaan. Durasi, model, kuota, dan biaya mengikuti Google Cloud.</div>
+          </section>
+          <section class="panel video-panel">
+            <div class="panel-heading"><div><h3>Generated Video</h3><p>Pratinjau dan unduh klip yang selesai dibuat.</p></div><span class="draft-pill" id="video-output-state">NO OUTPUT</span></div>
+            <div class="video-output-wrap" id="video-output-wrap"><div class="media-placeholder"><span>▶</span><b>Belum ada video</b><small>Hasil video akan tampil setelah proses selesai.</small></div></div>
+            <div class="composer-actions"><a class="secondary-button video-download disabled" id="video-download" href="#" aria-disabled="true">Unduh MP4</a><button class="secondary-button" id="video-check" type="button" disabled>↻ Periksa status</button></div>
+            <p class="composer-hint" id="video-output-note">Video hasil generasi akan disediakan melalui tautan sementara Google Cloud Storage.</p>
+          </section>
+        </div>
+        <div class="prototype-note"><b>Batas v1.6.0:</b> AI Video Lab menghasilkan satu klip pendek per permintaan. Belum ada konsistensi karakter otomatis antar-klip, kontrol frame akhir, lipsync khusus, atau penyambungan multi-scene. Gunakan Video Composer untuk merangkai hasil setelah diunduh jika browser dan editor mendukung file tersebut.</div>
+      </section>
+      <section class="content production-control-content" id="production-control-view" hidden>
+        <div class="welcome-row"><div><p class="welcome-kicker">NEXORA · END-TO-END WORKFLOW</p><h2>Production <em>Control.</em></h2><p class="muted">Satukan hasil pipeline Agent, siapkan aset media, lakukan pemeriksaan, dan kelola persetujuan sebelum video dirender.</p></div><div class="date-chip">✦ <span>AUTONOMOUS PRODUCTION · v1.7.0</span></div></div>
+        <div class="production-notice"><b>Human approval gates</b><span>NEXORA dapat mengoordinasikan tahapan dan menyiapkan handoff. Pembuatan gambar, suara, dan video tetap memakai layanan terpisah, kuota, serta biaya provider. Setiap hasil media wajib ditinjau sebelum diteruskan; tidak ada publikasi otomatis.</span></div>
+        <div class="stats-grid pc-stats"><article class="stat-card"><div class="stat-icon purple">▤</div><div><span>Hasil Agent</span><strong id="pc-agent-count">0/11</strong><small>Diimpor dari Autonomous Studio</small></div></article><article class="stat-card"><div class="stat-icon green">▣</div><div><span>Tugas produksi</span><strong id="pc-task-count">0</strong><small>Daftar pekerjaan media</small></div></article><article class="stat-card"><div class="stat-icon amber">◷</div><div><span>Menunggu review</span><strong id="pc-review-count">0</strong><small>Perlu pemeriksaan manusia</small></div></article><article class="stat-card"><div class="stat-icon blue">✓</div><div><span>Disetujui</span><strong id="pc-approved-count">0</strong><small>Siap ke tahap berikutnya</small></div></article></div>
+        <div class="pc-grid">
+          <section class="panel pc-panel"><div class="panel-heading"><div><h3>1. Import hasil AI pipeline</h3><p>Ambil hasil run terbaru dari Autonomous Studio pada perangkat ini.</p></div><span class="draft-pill">LOCAL HANDOFF</span></div><div class="pc-import-info" id="pc-import-info">Belum ada pipeline yang diimpor.</div><button class="primary-button full-button" id="pc-import" type="button">↻ Import pipeline terbaru</button><button class="secondary-button full-button" id="pc-export" type="button">Ekspor production pack (.json)</button></section>
+          <section class="panel pc-panel"><div class="panel-heading"><div><h3>2. Production brief</h3><p>Ringkasan brief dan keputusan produksi dari Agent.</p></div><span class="draft-pill">PROJECT CONTEXT</span></div><label class="field-label" for="pc-project-title">Nama proyek</label><input class="style-input" id="pc-project-title" maxlength="100" placeholder="Nama proyek"/><label class="field-label" for="pc-project-brief">Brief</label><textarea class="style-input" id="pc-project-brief" rows="5" placeholder="Brief dari pipeline akan muncul di sini."></textarea><div class="composer-hint">Perubahan disimpan otomatis di browser perangkat ini.</div></section>
+        </div>
+        <section class="panel pc-tasks-panel"><div class="panel-heading"><div><h3>3. Department task board</h3><p>Kelola pekerjaan kreatif dan status review setiap departemen.</p></div><span class="draft-pill">11 AGENTS</span></div><div class="pc-task-list" id="pc-task-list"><div class="auto-empty">Import pipeline untuk membangun daftar tugas.</div></div></section>
+        <section class="panel pc-scenes-panel"><div class="panel-heading"><div><h3>4. Scene production queue</h3><p>Buat daftar adegan yang perlu aset gambar, animasi, dan narasi.</p></div><span class="draft-pill">MEDIA QUEUE</span></div><div class="pc-scene-form"><input class="style-input" id="pc-scene-title" maxlength="90" placeholder="Judul adegan, misalnya: Desa saat senja"/><textarea class="style-input" id="pc-scene-prompt" rows="3" maxlength="1200" placeholder="Deskripsi visual dan gerakan adegan..."></textarea><button class="primary-button" id="pc-add-scene" type="button">＋ Tambah adegan</button></div><div class="pc-scene-list" id="pc-scene-list"><div class="auto-empty">Belum ada adegan.</div></div></section>
+        <div class="prototype-note"><b>Batas v1.7.0:</b> Production Control adalah orchestrator dan papan handoff lokal. Ia belum otomatis menjalankan semua API media secara berantai, belum mengunduh hasil Veo/TTS ke Asset Library, dan belum membuat final MP4 secara cloud. Agent text pipeline tetap berjalan pada menu Autonomous Studio. Gunakan tombol handoff untuk membuka studio terkait dan tinjau setiap hasil.</div>
+      </section>
+      <section class="content composer-content" id="composer-view" hidden>
+        <div class="welcome-row"><div><p class="welcome-kicker">NEXORA FINAL ASSEMBLY</p><h2>Video <em>Composer.</em></h2><p class="muted">Rangkai aset visual dan teks adegan menjadi video pratinjau yang dapat diekspor langsung dari browser HP.</p></div><div class="date-chip">▣ <span>ANIMATION ENGINE · v1.4.0</span></div></div>
+        <div class="production-notice"><b>Perakitan video lokal</b><span>Composer ini benar-benar merekam kanvas menjadi file WebM menggunakan browser. Ia tidak membuat gambar/animasi AI sendiri. Gunakan aset yang kamu miliki atau punya izin untuk digunakan. Audio narasi opsional akan dicampurkan jika browser mendukungnya.</span></div>
+        <div class="composer-layout">
+          <section class="panel composer-panel">
+            <div class="panel-heading"><div><h3>Pengaturan proyek</h3><p>Atur format video dan durasi default; setiap adegan juga bisa punya durasi sendiri.</p></div><span class="draft-pill">PROJECT SETUP</span></div>
+            <label class="field-label" for="composer-title">Judul video</label><input class="style-input" id="composer-title" maxlength="100" value="NEXORA Production" placeholder="Judul video">
+            <label class="field-label" for="composer-ratio">Rasio video</label><select class="style-input" id="composer-ratio"><option value="9:16">9:16 · Shorts / Reels / TikTok</option><option value="16:9">16:9 · YouTube</option><option value="1:1">1:1 · Square</option></select>
+            <label class="field-label" for="composer-duration">Durasi default adegan (detik)</label><input class="style-input" id="composer-duration" type="number" min="2" max="20" value="5">
+            <label class="field-label" for="composer-audio">Audio narasi / musik (opsional)</label><input class="style-input" id="composer-audio" type="file" accept="audio/*">
+            <div class="composer-actions"><button class="secondary-button" id="composer-add" type="button">＋ Tambah adegan</button><button class="secondary-button" id="composer-save" type="button">Simpan draft</button><button class="secondary-button" id="composer-export-project" type="button">Ekspor project JSON</button></div>
+            <div class="composer-hint" id="composer-status">Tambahkan minimal satu adegan untuk memulai.</div>
+          </section>
+          <section class="panel composer-panel">
+            <div class="panel-heading"><div><h3>Preview & export</h3><p>Pratinjau frame dan buat file video WebM.</p></div><span class="draft-pill">RENDER</span></div>
+            <div class="composer-preview-wrap"><canvas id="composer-canvas" width="720" height="1280"></canvas></div>
+            <div class="composer-actions"><button class="primary-button" id="composer-preview" type="button">▶ Preview</button><button class="primary-button" id="composer-render" type="button">⬇ Render WebM</button></div>
+            <div class="composer-hint" id="composer-render-status">Hasil render akan muncul di sini. Tetap buka halaman selama proses berlangsung.</div>
+            <a id="composer-download" class="composer-download" hidden>Unduh video hasil render</a>
+          </section>
+        </div>
+        <section class="panel composer-scenes-panel"><div class="panel-heading"><div><h3>Scene Builder</h3><p>Atur gambar, teks, gerakan kamera, durasi, dan transisi untuk setiap adegan.</p></div><span id="composer-scene-count" class="draft-pill">0 SCENES</span></div><div id="composer-scenes" class="composer-scenes"></div></section>
+        <div class="prototype-note"><b>Batas v1.4.0:</b> Animation Engine menggerakkan gambar 2D dengan kamera, fade, wipe, dan cut. Ini belum menghasilkan gerakan karakter atau video AI. Ekspor menggunakan WebM dan dukungan perekaman bergantung browser/perangkat. Audio AI Viona dapat ditambahkan melalui kolom audio. Untuk hasil terbaik, gunakan gambar landscape/portrait sesuai rasio dan uji render pendek terlebih dahulu. Draft lokal tidak menyimpan file gambar/audio; pilih ulang aset setelah membuka kembali draft.</div>
+      </section>
+      <section class="content ai-lab-content" id="ai-lab-view" hidden>
+        <div class="welcome-row"><div><p class="welcome-kicker">LIVE MODEL CONNECTION</p><h2>AI Agent <em>Lab.</em></h2><p class="muted">Jalankan satu Agent spesialis dengan model Gemini melalui fungsi server Netlify.</p></div><div class="date-chip">◉ <span>AI CONNECTOR · v0.8.0</span></div></div>
+        <div class="production-notice"><b>Integrasi AI sungguhan</b><span>Respons dihasilkan oleh Gemini saat koneksi server dan API key sudah dikonfigurasi. Agent tetap bekerja satu per satu; ini belum merupakan sistem otonom yang berjalan sendiri.</span></div>
+        <div class="ai-lab-grid">
+          <section class="panel ai-lab-panel">
+            <div class="panel-heading"><div><h3>Konfigurasi model</h3><p>API key disimpan sebagai environment variable di Netlify, bukan di browser.</p></div><span class="draft-pill">SERVER-SIDE KEY</span></div>
+            <div class="ai-status-row"><span id="ai-connection-dot" class="ai-dot"></span><b id="ai-connection-status">Belum diperiksa</b></div>
+            <label class="field-label" for="ai-model">Model Gemini</label><select class="style-input" id="ai-model"><option value="gemini-2.5-flash">Gemini 2.5 Flash</option></select>
+            <button class="secondary-button full-button" id="ai-test-connection" type="button">Uji koneksi server</button>
+            <div class="ai-setup-steps"><b>Pengaturan pertama kali</b><ol><li>Deploy folder proyek ini ke Netlify.</li><li>Buka Site configuration → Environment variables.</li><li>Tambahkan <code>GEMINI_API_KEY</code> dengan API key milikmu.</li><li>Deploy ulang, lalu tekan Uji koneksi server.</li></ol><p>Jangan menempelkan API key ke kolom prompt, file JavaScript, atau chat. Jangan bagikan key kepada siapa pun.</p></div>
+          </section>
+          <section class="panel ai-lab-panel">
+            <div class="panel-heading"><div><h3>Jalankan Agent</h3><p>Pilih spesialis dan berikan satu tugas yang jelas.</p></div><span class="draft-pill">ONE AGENT RUN</span></div>
+            <form id="ai-agent-form"><label class="field-label" for="ai-agent">Agent</label><select class="style-input" id="ai-agent"><option value="Septian">Septian — CEO</option><option value="Arka">Arka — Director</option><option value="Nara">Nara — Research</option><option value="Saka">Saka — Fact Checker</option><option value="Raka">Raka — Story</option><option value="Kirana">Kirana — Scriptwriter</option><option value="Aira">Aira — Artist</option><option value="Kairo">Kairo — Animator</option><option value="Viona">Viona — Voice</option><option value="Damar">Damar — Editor</option><option value="Elara">Elara — Quality Control</option></select>
+            <label class="field-label" for="ai-task">Instruksi tugas</label><textarea class="style-input scene-textarea" id="ai-task" required maxlength="6000" placeholder="Contoh: Buat 5 ide video cerita misteri Indonesia berdurasi 60 detik. Sertakan hook dan alasan pemilihan ide."></textarea>
+            <label class="field-label" for="ai-context">Konteks tambahan (opsional)</label><textarea class="style-input scene-textarea short" id="ai-context" maxlength="5000" placeholder="Tempel brief atau konteks proyek. Hindari data pribadi dan rahasia."></textarea>
+            <button class="primary-button full-button" id="ai-run-button" type="submit">▶ Jalankan Agent dengan Gemini</button></form>
+          </section>
+        </div>
+        <section class="panel ai-result-panel"><div class="panel-heading"><div><h3>Hasil pekerjaan Agent</h3><p id="ai-result-meta">Output dari panggilan model terakhir akan tampil di sini.</p></div><button class="text-button" id="ai-copy-result" type="button">Salin hasil</button></div><div id="ai-result" class="ai-result" aria-live="polite">Belum ada hasil. Pastikan server sudah dikonfigurasi, lalu jalankan Agent.</div></section>
+        <div class="prototype-note"><b>Batas kemampuan v0.8.0:</b> koneksi ini menghasilkan teks dari satu panggilan Gemini. NEXORA belum otomatis melakukan pencarian web, membuat gambar/video/audio, menyimpan riwayat percakapan AI ke cloud, atau menjalankan rangkaian 10 Agent tanpa pengawasan. Model dapat keliru; periksa fakta penting secara terpisah.</div>
+      </section>
+      <section class="content" id="creative-view" hidden>
+        <div class="welcome-row"><div><p class="welcome-kicker">NEXORA CREATIVE DEPARTMENT</p><h2>Creative <em>Production.</em></h2><p class="muted">Ruang kerja aset kreatif, pedoman karakter, dan prompt produksi yang dibantu AI.</p></div><div class="date-chip">✦ <span>CREATIVE LAB · v1.1.0</span></div></div>
+        <div class="production-notice"><b>Creative Production Workspace</b><span>Gunakan AI untuk menyusun brief visual dan voice-over, simpan referensi karakter, lalu unggah aset hasil produksi. Fitur ini belum mengklaim membuat gambar, suara, atau animasi secara otomatis.</span></div>
+        <div class="memory-grid">
+          <section class="panel"><div class="panel-heading"><div><h3>Character Bible</h3><p>Pedoman karakter agar desain antaradegan tetap konsisten.</p></div><span class="draft-pill">CONSISTENCY</span></div>
+            <form id="creative-character-form"><label class="field-label">Nama karakter</label><input class="style-input" id="cc-name" required maxlength="70" placeholder="Contoh: Laras"/><label class="field-label">Deskripsi visual tetap</label><textarea class="style-input scene-textarea" id="cc-visual" required maxlength="1500" placeholder="Usia karakter fiksi, bentuk rambut, pakaian, warna, ciri visual, aksesori..."></textarea><label class="field-label">Kepribadian & cara bicara</label><textarea class="style-input scene-textarea" id="cc-personality" maxlength="1000" placeholder="Sifat, ekspresi, intonasi, kebiasaan..."></textarea><button class="primary-button full-button" type="submit">＋ Simpan Character Bible</button></form>
+            <div id="creative-characters" class="memory-list"></div>
+          </section>
+          <section class="panel"><div class="panel-heading"><div><h3>AI Creative Brief</h3><p>Buat arahan visual atau voice-over dengan Gemini.</p></div><span class="draft-pill">GEMINI</span></div>
+            <label class="field-label">Jenis brief</label><select class="style-input" id="creative-kind"><option value="visual">Visual / Image Prompt</option><option value="storyboard">Storyboard / Animation Direction</option><option value="voice">Voice-over Direction</option><option value="shotlist">Shot List / Camera Plan</option></select>
+            <label class="field-label">Gaya visual</label><select class="style-input" id="creative-style"><option>2D cinematic animation</option><option>Anime</option><option>3D stylized</option><option>Voxel</option><option>Pixel art</option><option>Watercolor</option><option>Wayang-inspired illustration</option><option>Comic book</option><option>Realistic documentary</option><option>AI Adaptive</option></select>
+            <label class="field-label">Brief proyek / adegan</label><textarea class="style-input scene-textarea" id="creative-brief" maxlength="4000" placeholder="Jelaskan cerita, lokasi, suasana, aksi, komposisi, durasi..."></textarea>
+            <label class="field-label">Karakter terkait</label><select class="style-input" id="creative-character"><option value="">Tidak menggunakan karakter tersimpan</option></select>
+            <button class="primary-button full-button" id="creative-generate" type="button">✦ Buat arahan dengan AI</button><div class="composer-hint" id="creative-status">Memerlukan koneksi Gemini yang sudah dikonfigurasi di Netlify.</div>
+            <div class="panel-heading" style="margin-top:18px"><div><h3>Hasil creative brief</h3><p>Salin atau ekspor untuk diteruskan ke workflow produksi.</p></div></div><pre id="creative-result" class="ai-result-box" style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:420px;overflow:auto">Belum ada hasil.</pre><div class="composer-actions"><button class="secondary-button" id="creative-copy" type="button">Salin hasil</button><button class="secondary-button" id="creative-download" type="button">Ekspor TXT</button></div>
+          </section>
+        </div>
+        <section class="panel composer-scenes-panel"><div class="panel-heading"><div><h3>Asset Library</h3><p>Simpan referensi gambar, audio, atau video di browser perangkat ini.</p></div><span class="draft-pill" id="creative-asset-count">0 ASSETS</span></div><label class="field-label" for="creative-assets">Unggah aset</label><input class="style-input" id="creative-assets" type="file" accept="image/*,audio/*,video/*" multiple/><div id="creative-asset-list" class="memory-list"></div></section>
+        <div class="prototype-note"><b>Penyimpanan & integrasi:</b> Character Bible dan daftar aset disimpan di IndexedDB browser pada perangkat ini. Jangan hapus data situs jika ingin mempertahankannya. Aset belum otomatis dikirim ke Gemini atau dipasang ke timeline Video Composer. Gunakan hanya materi yang kamu miliki atau punya izin.</div>
+      </section>
+      <section class="content memory-content" id="memory-view" hidden>
+        <div class="welcome-row"><div><p class="welcome-kicker">EXECUTIVE KNOWLEDGE SYSTEM</p><h2>CEO <em>Memory.</em></h2><p class="muted">Ruang catatan keputusan, visi, dan aturan kerja perusahaan yang dipimpin Septian.</p></div><div class="date-chip">◈ <span>CEO: SEPTIAN</span></div></div>
+        <div class="ceo-profile panel"><div class="ceo-avatar">S</div><div><span class="eyebrow">CHIEF EXECUTIVE OFFICER</span><h3>Septian</h3><p>Founder & CEO · NEXORA STUDIO</p><small>Memimpin strategi, prioritas produksi, dan arah perusahaan.</small></div></div>
+        <div class="memory-grid"><section class="panel memory-editor"><div class="panel-heading"><div><h3>Tambahkan memori perusahaan</h3><p>Simpan keputusan atau informasi penting untuk referensi.</p></div></div><form id="memory-form"><label class="field-label" for="memory-category">Kategori</label><select class="style-input" id="memory-category"><option>Visi & misi</option><option>Aturan perusahaan</option><option>Preferensi produksi</option><option>Keputusan CEO</option><option>Catatan proyek</option></select><label class="field-label" for="memory-title">Judul catatan</label><input class="style-input" id="memory-title" required maxlength="90" placeholder="Contoh: Standar kualitas video"/><label class="field-label" for="memory-body">Isi memori</label><textarea class="style-input scene-textarea" id="memory-body" required placeholder="Tuliskan keputusan, aturan, atau informasi yang perlu diingat..."></textarea><button class="primary-button full-button" type="submit">＋ Simpan ke CEO Memory</button></form></section>
+        <section class="panel memory-list-panel"><div class="panel-heading"><div><h3>Memori tersimpan</h3><p>Catatan lokal yang dapat dibaca kembali.</p></div><span class="draft-pill" id="memory-count">0 CATATAN</span></div><div id="memory-list" class="memory-list"><div class="empty-timeline">Belum ada memori. Tambahkan catatan pertama.</div></div></section></div>
+        <div class="prototype-note"><b>Perlu diketahui:</b> ini adalah CEO Memory lokal pada browser. Belum tersinkron ke cloud dan belum otomatis dibaca oleh model AI.</div>
+      </section>
+      <section class="content cloud-content" id="cloud-view" hidden>
+        <div class="welcome-row"><div><p class="welcome-kicker">NEXORA · CLOUD INFRASTRUCTURE</p><h2>Cloud <em>Center.</em></h2><p class="muted">Hubungkan ruang kerja NEXORA ke Supabase agar memori, tugas, log, dan aset dapat disimpan di cloud.</p></div><div class="date-chip">☁ <span>CLOUD SYSTEM · v1.8.0</span></div></div>
+        <div class="production-notice"><b>Cloud connection is optional</b><span>Frontend tidak menyimpan service-role key. Koneksi dilakukan melalui Netlify Functions. Gunakan kode akses bersama yang tidak mudah ditebak. Supabase dan Netlify memerlukan akun serta konfigurasi sendiri; penggunaan storage/database mengikuti kuota dan kebijakan provider.</span></div>
+        <section class="panel cloud-connect-panel">
+          <div class="panel-heading"><div><h3>Cloud connection</h3><p>Masukkan kode akses yang disiapkan pada Environment Variables Netlify.</p></div><span class="draft-pill" id="cloud-state-pill">OFFLINE</span></div>
+          <label class="field-label" for="cloud-access-code">NEXORA Cloud Access Code</label><input class="style-input" id="cloud-access-code" type="password" autocomplete="off" maxlength="120" placeholder="Kode akses cloud" />
+          <div class="cloud-actions"><button class="primary-button" id="cloud-connect" type="button">☁ Hubungkan cloud</button><button class="secondary-button" id="cloud-disconnect" type="button">Putuskan</button></div>
+          <p class="composer-hint" id="cloud-status" aria-live="polite">Belum terhubung. Kode akses hanya disimpan sementara selama tab ini aktif.</p>
+        </section>
+        <div class="cloud-stats"><article class="stat-card"><div class="stat-icon purple">◈</div><div><span>Memori cloud</span><strong id="cloud-memory-count">—</strong><small>Catatan lintas perangkat</small></div></article><article class="stat-card"><div class="stat-icon blue">▤</div><div><span>Tugas cloud</span><strong id="cloud-task-count">—</strong><small>Cloud task records</small></div></article><article class="stat-card"><div class="stat-icon green">▣</div><div><span>Aset cloud</span><strong id="cloud-asset-count">—</strong><small>File tersimpan</small></div></article><article class="stat-card"><div class="stat-icon amber">◷</div><div><span>Activity logs</span><strong id="cloud-log-count">—</strong><small>Jejak aktivitas</small></div></article></div>
+        <div class="cloud-grid">
+          <section class="panel cloud-panel"><div class="panel-heading"><div><h3>Agent Cloud Memory</h3><p>Simpan pengetahuan jangka panjang per Agent.</p></div><span class="draft-pill">SHARED DATABASE</span></div>
+            <label class="field-label" for="cloud-memory-agent">Agent</label><select class="style-input" id="cloud-memory-agent"><option>Septian</option><option>Arka</option><option>Nara</option><option>Saka</option><option>Raka</option><option>Kirana</option><option>Aira</option><option>Kairo</option><option>Viona</option><option>Damar</option><option>Elara</option></select>
+            <label class="field-label" for="cloud-memory-category">Kategori</label><input class="style-input" id="cloud-memory-category" maxlength="80" value="Project knowledge" />
+            <label class="field-label" for="cloud-memory-title">Judul</label><input class="style-input" id="cloud-memory-title" maxlength="120" placeholder="Judul memori" />
+            <label class="field-label" for="cloud-memory-body">Isi</label><textarea class="style-input" id="cloud-memory-body" maxlength="12000" placeholder="Informasi yang perlu diingat Agent..."></textarea>
+            <button class="primary-button full-button" id="cloud-memory-save" type="button">＋ Simpan memori cloud</button><div class="cloud-record-list" id="cloud-memory-list"><div class="empty-timeline">Hubungkan cloud untuk memuat data.</div></div>
+          </section>
+          <section class="panel cloud-panel"><div class="panel-heading"><div><h3>Cloud Task Queue</h3><p>Daftar tugas tersimpan pada database cloud.</p></div><span class="draft-pill">CROSS-DEVICE</span></div>
+            <label class="field-label" for="cloud-task-title">Nama tugas</label><input class="style-input" id="cloud-task-title" maxlength="160" placeholder="Contoh: Riset cerita episode 01" />
+            <label class="field-label" for="cloud-task-agent">Penanggung jawab</label><select class="style-input" id="cloud-task-agent"><option>Arka</option><option>Nara</option><option>Saka</option><option>Raka</option><option>Kirana</option><option>Aira</option><option>Kairo</option><option>Viona</option><option>Damar</option><option>Elara</option><option>Septian</option></select>
+            <label class="field-label" for="cloud-task-details">Detail tugas</label><textarea class="style-input" id="cloud-task-details" maxlength="12000" placeholder="Konteks dan hasil yang diharapkan..."></textarea>
+            <button class="primary-button full-button" id="cloud-task-save" type="button">＋ Tambah tugas cloud</button><div class="cloud-record-list" id="cloud-task-list"><div class="empty-timeline">Hubungkan cloud untuk memuat data.</div></div>
+          </section>
+          <section class="panel cloud-panel"><div class="panel-heading"><div><h3>Cloud Asset Storage</h3><p>Unggah file kecil ke private bucket Supabase.</p></div><span class="draft-pill">MAX 4 MB / FILE</span></div>
+            <label class="field-label" for="cloud-asset-file">Pilih gambar, audio, atau dokumen</label><input class="style-input" id="cloud-asset-file" type="file" accept="image/*,audio/*,video/*,.pdf,.txt,.json" />
+            <button class="primary-button full-button" id="cloud-asset-upload" type="button">↑ Unggah ke cloud</button><div class="cloud-record-list" id="cloud-asset-list"><div class="empty-timeline">Hubungkan cloud untuk memuat data.</div></div>
+          </section>
+          <section class="panel cloud-panel"><div class="panel-heading"><div><h3>Activity & Recovery</h3><p>Catatan aktivitas cloud dan ekspor backup.</p></div><span class="draft-pill">AUDIT LOG</span></div>
+            <label class="field-label" for="cloud-log-message">Catat aktivitas</label><textarea class="style-input" id="cloud-log-message" maxlength="3000" placeholder="Contoh: Septian menyetujui draft episode 01."></textarea>
+            <button class="primary-button full-button" id="cloud-log-add" type="button">＋ Tambah activity log</button><button class="secondary-button full-button" id="cloud-refresh" type="button">↻ Sinkronkan semua data</button><button class="secondary-button full-button" id="cloud-backup" type="button">↓ Ekspor cloud backup JSON</button><div class="cloud-record-list" id="cloud-log-list"><div class="empty-timeline">Hubungkan cloud untuk memuat data.</div></div>
+          </section>
+        </div>
+        <div class="prototype-note"><b>Keamanan & batas v1.8.0:</b> ini adalah konektor cloud awal dengan satu kode akses bersama, bukan sistem akun multi-user. Buat tabel dan bucket menggunakan SQL yang disertakan. Jangan memasukkan service-role key ke browser atau membagikan kode akses. Backup JSON diunduh ke perangkat; restore otomatis dan sinkronisasi dua arah localStorage belum diaktifkan. Jangan unggah data pribadi atau file yang tidak kamu miliki.</div>
+      </section>
+    </main>
+  </div>
+
+  <div class="agent-modal-backdrop" id="agent-modal">
+    <div class="agent-modal">
+      <button class="modal-close" id="modal-close">×</button>
+      <div class="modal-avatar" id="modal-avatar">R</div>
+      <div class="eyebrow">PROFIL KARYAWAN AI</div>
+      <h2 id="modal-name">Research Agent</h2>
+      <p class="modal-role" id="modal-role">Global Intelligence</p>
+      <div class="modal-status" id="modal-status">● Bekerja</div>
+      <div class="modal-info"><span>Kepribadian</span><b id="modal-personality">Analitis, penasaran</b></div>
+      <div class="modal-info"><span>Aktivitas</span><b id="modal-activity">Menganalisis tren</b></div>
+      <div class="modal-info"><span>Preferensi istirahat</span><b id="modal-break">Membaca dan minum kopi</b></div>
+      <p class="modal-note">Profil ini merupakan data contoh. Kepribadian dan preferensi Agent akan dapat diatur melalui Employee Management.</p>
+    </div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+  <script type="module" src="./production.js"></script>
+  <script type="module" src="./core.js"></script>
+  <script type="module" src="./brain.js"></script>
+  <script type="module" src="./ai-lab.js"></script>
+  <script type="module" src="./autonomous.js"></script>
+  <script type="module" src="./composer.js"></script>
+  <script type="module" src="./voice.js"></script>
+  <script type="module" src="./creative.js"></script>
+  <script type="module" src="./media.js"></script>
+  <script type="module" src="./video.js"></script>
+  <script type="module" src="./production-control.js"></script>
+  <script type="module" src="./cloud.js"></script>
+</body>
+</html>
