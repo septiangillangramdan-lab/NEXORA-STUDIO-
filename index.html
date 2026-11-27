@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#101827" />
-  <title>NEXORA STUDIO v1.9.0 — Agent Cloud Sync</title>
+  <title>NEXORA STUDIO v2.0.1 — Autonomous Multi-Agent Collaboration</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -46,6 +46,7 @@
         <button class="nav-item" data-view="knowledge"><span>▤</span> Knowledge Center</button>
         <button class="nav-item" data-view="memory"><span>◈</span> CEO Memory</button>
         <button class="nav-item" data-view="cloud"><span>☁</span> Cloud Center</button>
+        <button class="nav-item" data-view="collab"><span>⇄</span> Agent Room</button>
       </nav>
 
       <div class="sidebar-bottom">
@@ -416,7 +417,7 @@
         <div class="prototype-note"><b>Perlu diketahui:</b> ini adalah CEO Memory lokal pada browser. Belum tersinkron ke cloud dan belum otomatis dibaca oleh model AI.</div>
       </section>
       <section class="content cloud-content" id="cloud-view" hidden>
-        <div class="welcome-row"><div><p class="welcome-kicker">NEXORA · CLOUD INFRASTRUCTURE</p><h2>Cloud <em>Center.</em></h2><p class="muted">Hubungkan ruang kerja NEXORA ke Supabase agar memori, tugas, log, dan aset dapat disimpan di cloud.</p></div><div class="date-chip">☁ <span>CLOUD SYSTEM · v1.9.0</span></div></div>
+        <div class="welcome-row"><div><p class="welcome-kicker">NEXORA · CLOUD INFRASTRUCTURE</p><h2>Cloud <em>Center.</em></h2><p class="muted">Hubungkan ruang kerja NEXORA ke Supabase agar memori, tugas, log, dan aset dapat disimpan di cloud.</p></div><div class="date-chip">☁ <span>CLOUD SYSTEM · v2.0.1</span></div></div>
         <div class="production-notice"><b>Cloud connection is optional</b><span>Frontend tidak menyimpan service-role key. Koneksi dilakukan melalui Netlify Functions. Gunakan kode akses bersama yang tidak mudah ditebak. Supabase dan Netlify memerlukan akun serta konfigurasi sendiri; penggunaan storage/database mengikuti kuota dan kebijakan provider.</span></div>
         <section class="panel cloud-connect-panel">
           <div class="panel-heading"><div><h3>Cloud connection</h3><p>Masukkan kode akses yang disiapkan pada Environment Variables Netlify.</p></div><span class="draft-pill" id="cloud-state-pill">OFFLINE</span></div>
@@ -448,7 +449,48 @@
             <button class="primary-button full-button" id="cloud-log-add" type="button">＋ Tambah activity log</button><button class="secondary-button full-button" id="cloud-refresh" type="button">↻ Sinkronkan semua data</button><button class="secondary-button full-button" id="cloud-backup" type="button">↓ Ekspor cloud backup JSON</button><div class="cloud-record-list" id="cloud-log-list"><div class="empty-timeline">Hubungkan cloud untuk memuat data.</div></div>
           </section>
         </div>
-        <div class="prototype-note"><b>Keamanan & batas v1.9.0:</b> ini adalah konektor cloud awal dengan satu kode akses bersama, bukan sistem akun multi-user. Buat tabel dan bucket menggunakan SQL yang disertakan. Jangan memasukkan service-role key ke browser atau membagikan kode akses. Backup JSON diunduh ke perangkat. Sinkronisasi memori Agent tersedia secara manual melalui AI Brain; sinkronisasi otomatis untuk seluruh modul localStorage belum diaktifkan. Jangan unggah data pribadi atau file yang tidak kamu miliki.</div>
+        <div class="prototype-note"><b>Keamanan & batas v2.0.1:</b> ini adalah konektor cloud awal dengan satu kode akses bersama, bukan sistem akun multi-user. Buat tabel dan bucket menggunakan SQL yang disertakan. Jangan memasukkan service-role key ke browser atau membagikan kode akses. Backup JSON diunduh ke perangkat. Sinkronisasi memori Agent tersedia secara manual melalui AI Brain; sinkronisasi otomatis untuk seluruh modul localStorage belum diaktifkan. Jangan unggah data pribadi atau file yang tidak kamu miliki.</div>
+      </section>
+
+      <section class="content collab-content" id="collab-view" hidden>
+        <div class="welcome-row"><div><p class="welcome-kicker">NEXORA · MULTI-AGENT COLLABORATION</p><h2>Agent <em>Room.</em></h2><p class="muted">CEO memberi brief, Arka dan tim bekerja lewat antrean task bersama, saling kirim pesan, dan menunggu persetujuan Anda.</p></div><div class="date-chip">⇄ <span>COLLAB · v2.0.1</span></div></div>
+        <div class="production-notice"><b>Hasil Agent = dokumen teks</b><span>Tahap ini menghasilkan rencana, naskah, shot list, dan arahan suara dalam bentuk teks. Belum membuat file gambar, audio, atau video. Setiap langkah memakai kuota gratis penyedia AI Anda (Gemini atau API kompatibel OpenAI); batasnya diatur di Netlify (NEXORA_DAILY_AI_LIMIT).</span></div>
+        <p class="composer-hint cloud-status" id="collab-status" aria-live="polite">Buka menu ini setelah Cloud Center terhubung.</p>
+
+        <section class="panel collab-panel">
+          <div class="panel-heading"><div><h3>Brief baru dari CEO</h3><p>Sistem membuat 10 task bertahap dengan dependensi.</p></div><span class="draft-pill">NEW</span></div>
+          <label class="field-label" for="collab-new-title">Judul proyek</label><input class="style-input" id="collab-new-title" maxlength="160" placeholder="Contoh: Misteri Kapal Hantu Selat Sunda" />
+          <label class="field-label" for="collab-new-brief">Brief</label><textarea class="style-input" id="collab-new-brief" maxlength="6000" placeholder="Tujuan, gaya, durasi, target penonton, hal yang harus/tidak boleh ada."></textarea>
+          <label class="field-label" for="collab-new-mode">Persetujuan CEO</label>
+          <select class="style-input" id="collab-new-mode"><option value="manual">Manual — naskah dan hasil QC menunggu persetujuan saya</option><option value="auto">Otomatis — tanpa menunggu persetujuan</option></select>
+          <div class="cloud-actions"><button class="primary-button" id="collab-create" type="button">＋ Buat proyek</button><button class="secondary-button" id="collab-reload" type="button">↻ Muat ulang</button></div>
+        </section>
+
+        <section class="panel collab-panel"><div class="panel-heading"><div><h3>Daftar proyek</h3><p>Ketuk untuk membuka.</p></div><span class="activity-live" id="collab-project-count">0</span></div><div class="cloud-record-list" id="collab-project-list"></div></section>
+
+        <div id="collab-workspace" hidden>
+          <section class="panel collab-panel">
+            <div class="panel-heading"><div><h3 id="collab-title">Proyek</h3><p id="collab-sub">-</p></div></div>
+            <div class="collab-progress"><i id="collab-bar"></i></div>
+            <label class="field-label" for="collab-mode">Mode eksekusi</label>
+            <select class="style-input" id="collab-mode"><option value="background">Background (disarankan, tidak dibatasi 10 detik)</option><option value="direct">Langsung (jika Background Function tidak tersedia)</option></select>
+            <div class="cloud-actions"><button class="primary-button" id="collab-run-all" type="button">▶▶ Jalankan otomatis</button><button class="secondary-button" id="collab-run-one" type="button">▶ Satu task berikutnya</button><button class="secondary-button" id="collab-stop" type="button" hidden>■ Hentikan</button><button class="secondary-button" id="collab-cancel" type="button">Batalkan proyek</button></div>
+          </section>
+
+          <section class="panel collab-panel"><div class="panel-heading"><div><h3>Persetujuan CEO</h3><p>Keputusan yang menunggu Anda.</p></div><span class="activity-live" id="collab-approval-count">0</span></div><div class="cloud-record-list collab-tall" id="collab-approval-list"></div></section>
+          <section class="panel collab-panel"><div class="panel-heading"><div><h3>Task Monitoring</h3><p>Status nyata dari database, bukan simulasi.</p></div></div><div class="cloud-record-list collab-tall" id="collab-task-list"></div></section>
+
+          <section class="panel collab-panel">
+            <div class="panel-heading"><div><h3>Agent Discussion Room</h3><p>Pesan terkait proyek ini. Agent membaca pesan untuknya saat tugasnya berjalan.</p></div></div>
+            <div class="cloud-record-list collab-tall" id="collab-message-list"></div>
+            <label class="field-label" for="collab-msg-to">Kepada</label><select class="style-input" id="collab-msg-to"></select>
+            <label class="field-label" for="collab-msg-kind">Jenis</label><select class="style-input" id="collab-msg-kind"><option value="note">Catatan</option><option value="question">Pertanyaan</option><option value="decision">Keputusan</option></select>
+            <label class="field-label" for="collab-msg-body">Pesan</label><textarea class="style-input" id="collab-msg-body" maxlength="8000" placeholder="Tulis pesan sebagai Septian."></textarea>
+            <button class="primary-button full-button" id="collab-msg-send" type="button">Kirim pesan</button>
+          </section>
+
+          <section class="panel collab-panel"><div class="panel-heading"><div><h3>Production History</h3><p>Setiap percobaan eksekusi Agent.</p></div><span class="activity-live" id="collab-run-count">0</span></div><div class="cloud-record-list collab-tall" id="collab-history-list"></div></section>
+        </div>
       </section>
     </main>
   </div>
@@ -481,5 +523,6 @@
   <script type="module" src="./video.js"></script>
   <script type="module" src="./production-control.js"></script>
   <script type="module" src="./cloud.js"></script>
+  <script type="module" src="./collab.js"></script>
 </body>
 </html>

@@ -193,7 +193,7 @@ function employeeCard(e){
   el.addEventListener("click",()=>showAgent(e));return el;
 }
 function switchView(view){
-  const titles={office:"Kantor Virtual",employees:"Karyawan AI",production:"Produksi Konten",core:"NEXORA Core System",brain:"AI Brain System","ai-lab":"AI Agent Lab",autonomous:"Autonomous Studio","production-control":"Production Control",cloud:"Cloud Center",composer:"Video Composer",media:"AI Media Lab",video:"AI Video Lab",voice:"Voice Studio",trends:"Global Trends",knowledge:"Knowledge Center",memory:"CEO Memory"};
+  const titles={office:"Kantor Virtual",employees:"Karyawan AI",production:"Produksi Konten",core:"NEXORA Core System",brain:"AI Brain System","ai-lab":"AI Agent Lab",autonomous:"Autonomous Studio","production-control":"Production Control",cloud:"Cloud Center",collab:"Agent Room",composer:"Video Composer",media:"AI Media Lab",video:"AI Video Lab",voice:"Voice Studio",trends:"Global Trends",knowledge:"Knowledge Center",memory:"CEO Memory"};
   const subtitles={office:"Lihat suasana kantor NEXORA STUDIO dalam bentuk 3D.",employees:"Kelola profil, kepribadian, dan status seluruh Agent.",production:"Pantau proyek dan tahapan produksi konten.",trends:"Temukan topik yang sedang ramai dibicarakan.",knowledge:"Materi referensi yang diberikan oleh pemilik perusahaan.",memory:"Pengetahuan dan pengalaman jangka panjang perusahaan."};
   document.getElementById("page-title").textContent=titles[view]|| (view==="styles"?"Style Studio":titles.office);
   document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
@@ -207,6 +207,7 @@ function switchView(view){
   const video=document.getElementById("video-view"); if(video) video.hidden=view!=="video";
   const productionControl=document.getElementById("production-control-view"); if(productionControl) productionControl.hidden=view!=="production-control";
   const cloud=document.getElementById("cloud-view"); if(cloud) cloud.hidden=view!=="cloud";
+  const collabView=document.getElementById("collab-view"); if(collabView) collabView.hidden=view!=="collab";
   const office=document.getElementById("main-content"), style=document.getElementById("style-view"), production=document.getElementById("production-view"), team=document.getElementById("employee-view"), memory=document.getElementById("memory-view");
   if(office) office.hidden=view!=="office";
   if(style) style.hidden=view!=="styles";

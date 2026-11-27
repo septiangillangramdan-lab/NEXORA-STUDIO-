@@ -79,3 +79,17 @@
 .cloud-sync-tools .cloud-actions button{flex:1;min-width:150px}
 .cloud-status.success{color:#16845b}.cloud-status.error{color:#c04455}
 @media(max-width:600px){.cloud-sync-tools .cloud-actions{flex-direction:column}.cloud-sync-tools .cloud-actions button{width:100%}}
+
+/* v2.0.0 Agent Room */
+.collab-content{padding-top:27px}.collab-panel{padding:16px;margin:16px 0}.collab-panel .field-label{display:block;margin:12px 0 6px}
+.collab-tall{max-height:520px}.collab-pick{cursor:pointer}.collab-pick.active{border-color:var(--purple);background:var(--purple-soft)}
+.collab-progress{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin:6px 0 4px}.collab-progress i{display:block;height:100%;width:0;background:var(--purple);transition:width .4s}
+.collab-task-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.collab-task-head b{font-size:11px;color:#273449;overflow-wrap:anywhere}
+.collab-badge{font-size:8px;font-weight:700;padding:3px 8px;border-radius:99px;background:#eef1f6;color:#657287;white-space:nowrap}
+.collab-badge.st-working{background:#fff3d6;color:#9a6a00}.collab-badge.st-completed{background:#dff6ec;color:#16845b}.collab-badge.st-failed{background:#fde4e7;color:#c04455}.collab-badge.st-awaiting_approval,.collab-badge.st-revision{background:var(--purple-soft);color:var(--purple)}
+.collab-wait{color:#9a6a00!important}.collab-error{color:#c04455!important;font-size:9px}
+.collab-pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;font-size:9px;line-height:1.55;max-height:260px;overflow:auto;margin:6px 0;color:#455268}
+.collab-task details,.collab-panel details{margin-top:8px;font-size:9px}.collab-task summary,.collab-panel summary{cursor:pointer;color:var(--purple);font-weight:600}
+.collab-mini{width:auto;min-width:90px;padding:6px 8px}.collab-msg.k-revision_request{border-color:#e9c46a}.collab-msg.k-result{border-left:3px solid var(--purple)}
+.collab-content .cloud-record-actions{flex-wrap:wrap}
+@media(max-width:600px){.collab-panel{padding:12px}.collab-content .cloud-actions{flex-direction:column}.collab-content .cloud-actions>*{width:100%}.collab-content .welcome-row{align-items:flex-start}}

@@ -9,3 +9,19 @@ NEXORA_VIDEO_ACCESS_CODE=use-a-long-random-video-access-code
 SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 NEXORA_CLOUD_ACCESS_CODE=use-a-different-long-random-cloud-access-code
+
+# NEXORA v2.0.0 Agent Room (semua opsional; nilai default di dalam tanda kurung)
+NEXORA_AI_MODEL=gemini-2.5-flash
+NEXORA_DAILY_AI_LIMIT=40
+NEXORA_MAX_RETRIES=2
+NEXORA_STALE_MINUTES=5
+NEXORA_BG_TIMEOUT_MS=90000
+NEXORA_SYNC_TIMEOUT_MS=8500
+
+# NEXORA v2.0.1 — pilihan provider AI untuk Agent Room (default: gemini, memakai GEMINI_API_KEY)
+# Untuk memakai gateway kompatibel OpenAI seperti xKiro:
+# NEXORA_AI_PROVIDER=openai-compatible
+# NEXORA_AI_BASE_URL=https://api.xkiro.com/v1
+# NEXORA_AI_API_KEY=isi_key_dari_dashboard_penyedia
+# NEXORA_AI_MODEL=qwen/qwen3.8-max:free
+# NEXORA_AI_FALLBACK_MODEL=cohere/command-a

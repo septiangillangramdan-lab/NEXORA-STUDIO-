@@ -1,3 +1,40 @@
+# NEXORA STUDIO v2.0.1 — Autonomous Multi-Agent Collaboration (Tahap 1)
+
+## Baru di v2.0.1: pilihan provider AI untuk Agent Room
+- Default tetap Gemini (`GEMINI_API_KEY`). Untuk gateway kompatibel OpenAI (misalnya xKiro) isi `NEXORA_AI_PROVIDER=openai-compatible`, `NEXORA_AI_BASE_URL`, `NEXORA_AI_API_KEY`, `NEXORA_AI_MODEL`, dan opsional `NEXORA_AI_FALLBACK_MODEL` (dicoba bila model utama timeout/404/429/5xx).
+- Hanya **Agent Room** yang memakai provider ini. AI Agent Lab, Autonomous Studio, Voice, Media, dan Video Lab masih memakai Gemini.
+- Provider pihak ketiga melihat isi brief, naskah, dan memori yang dikirim ke model. Jangan kirim data pribadi/rahasia.
+
+
+## Yang baru di v2.0.0
+- **Agent Room** (menu baru): buat brief → sistem membuat 10 task bertahap dengan dependensi (Arka → Nara → Saka → Raka → Kirana → Aira/Viona → Kairo → Damar → Elara).
+- **Task queue pusat** di Supabase dengan status tervalidasi: antre, menunggu, bekerja, butuh persetujuan, revisi, selesai, gagal.
+- **Pesan antar-Agent** terstruktur (pengirim, penerima, proyek, task, jenis, status). Agent membaca pesan untuknya saat tugasnya berjalan.
+- **Shared Agent Brain**: tiap Agent menerima hasil tahap sebelumnya + maksimal 5 memori cloud yang relevan (bukan seluruh database). Hasil kerja disimpan balik ke Cloud Memory.
+- **Persetujuan CEO**: mode manual (naskah Kirana dan hasil QC Elara menunggu Anda) atau otomatis.
+- **QC mengembalikan tahap yang tepat**: Elara mengakhiri dengan `VERDICT: PASS` atau `VERDICT: REVISE <Agent>`; hanya Agent itu yang diulang, tahap hilirnya dikunci ulang.
+- **Retry terbatas, pemulihan, alihkan Agent**, deteksi task macet, penanganan kuota (429 tidak memakai jatah retry), batas panggilan AI harian.
+- **Idempotency**: proyek, task template, dan pesan memakai kunci unik; klik ganda/request ulang tidak menggandakan data.
+- **Production History**: setiap percobaan eksekusi tersimpan (model, token, error).
+
+## Batasan jujur v2.0.0 Tahap 1
+- Hasil tiap Agent adalah **dokumen teks**. Belum ada file gambar/audio/video nyata dari pipeline ini (itu Tahap 6).
+- Nara dan Saka **tidak punya akses internet**; mereka menulis dari pengetahuan model dan menandai klaim yang perlu dicek manusia.
+- Pemecahan brief menjadi task memakai **template tetap**, bukan hasil perencanaan dinamis Arka.
+- Satu kode akses bersama, bukan akun multi-user. Jangan memasukkan data pribadi atau rahasia.
+- Progres hanya berjalan saat halaman Agent Room terbuka (tidak ada worker latar belakang).
+
+## Upgrade dari v1.9.0
+1. Supabase → SQL Editor → jalankan seluruh isi `supabase-migration-v2.sql` (aman diulang; data lama tidak dihapus).
+2. Netlify → Environment variables: pastikan `GEMINI_API_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXORA_CLOUD_ACCESS_CODE`. Opsional: lihat `netlify-env.example.txt`.
+3. Deploy folder `nexora-studio` ini (drag & drop ulang). Variabel baru butuh deploy ulang.
+4. Buka **Cloud Center** → hubungkan → buka **Agent Room**. Baris status menampilkan model dan apakah GEMINI_API_KEY terdeteksi.
+5. Buat proyek kecil → **Jalankan otomatis**.
+
+Jika mode **Background** gagal (Background Function tidak tersedia di paket Anda), pilih mode **Langsung**; timeout Netlify untuk function sinkron bisa pendek sehingga Agent dengan jawaban panjang dapat gagal.
+
+---
+
 # NEXORA STUDIO v1.9.0 — Cloud Infrastructure
 
 Mobile-friendly AI production-company workspace designed for Android browser workflows. v1.8.0 builds on the earlier virtual office, 11-Agent roster, AI Brain, Gemini integrations, supervised production pipeline, media labs, Video Composer, and Production Control.
