@@ -1,4 +1,4 @@
-// NEXORA STUDIO v2.0.0 — eksekusi Agent: prepareRun (sinkron, terotentikasi) + finishRun (memanggil Gemini).
+// NEXORA STUDIO v2.0.2 — eksekusi Agent: prepareRun (sinkron, terotentikasi) + finishRun (memanggil Gemini).
 import {
   sb, sbCount, clean, intEnv, httpError, need, AGENTS, PIPELINE, REVISABLE, MAX_REVISIONS,
   audit, getTask, getProject, loadGraph, transition, addMessage, promote, refreshProject,
@@ -8,24 +8,69 @@ import {
 const enc = encodeURIComponent;
 const REP = { Prefer: 'return=representation' };
 const nowIso = () => new Date().toISOString();
-// ---------- Provider AI (Gemini atau API kompatibel OpenAI seperti xKiro) ----------
-export function aiInfo() {
-  const provider = process.env.NEXORA_AI_PROVIDER === 'openai-compatible' ? 'openai-compatible' : 'gemini';
-  const key = provider === 'gemini' ? process.env.GEMINI_API_KEY : process.env.NEXORA_AI_API_KEY;
-  const base = (process.env.NEXORA_AI_BASE_URL || 'https://api.xkiro.com/v1').replace(/\/+$/, '');
-  const model = (process.env.NEXORA_AI_MODEL || (provider === 'gemini' ? 'gemini-2.5-flash' : '')).trim();
-  const fallback = (process.env.NEXORA_AI_FALLBACK_MODEL || '').trim();
-  return { provider, key: key || '', base, model, fallback };
-}
+// ---------- Provider AI: rantai penyedia (v2.0.2) ----------
+// Penyedia utama (NEXORA_AI_* atau GEMINI_API_KEY) lalu slot bernomor NEXORA_AI1_* ... NEXORA_AI6_*.
+// Bila satu penyedia gagal (kuota, timeout, key salah, jawaban kosong), otomatis dicoba penyedia berikutnya.
+// Slot boleh dikhususkan untuk Agent tertentu lewat NEXORA_AI{n}_AGENTS=Arka,Nara (Agent lain tidak memakainya).
+const SLOTS = 6;
 const MODEL_RE = /^[A-Za-z0-9._:\/-]{3,100}$/;
+const envv = k => (process.env[k] || '').trim();
+const hostLabel = base => { try { return new URL(base).hostname.replace(/^api\./, ''); } catch { return 'penyedia'; } };
+const agentList = s => s.split(',').map(x => x.trim().toLowerCase()).filter(Boolean);
+
+function buildProvider({ id, name, kind, key, base, model, fallback, agents, keyVar, modelVar, baseVar }) {
+  const problems = [];
+  const models = [model, fallback].filter((m, i, a) => m && a.indexOf(m) === i);
+  if (!key) problems.push(`${keyVar} belum diatur`);
+  if (!models.length) problems.push(`${modelVar} wajib diisi`);
+  else if (models.some(m => !MODEL_RE.test(m))) problems.push(`format ${modelVar} tidak valid`);
+  if (kind === 'openai-compatible' && !/^https:\/\//i.test(base || '')) problems.push(`${baseVar} harus diawali https://`);
+  return { id, label: name || (kind === 'gemini' ? 'Gemini' : hostLabel(base)), provider: kind, key, base, models, agents, problems };
+}
+function mainProvider() {
+  const kind = envv('NEXORA_AI_PROVIDER') === 'openai-compatible' ? 'openai-compatible' : 'gemini';
+  return buildProvider({
+    id: 'utama', kind, name: envv('NEXORA_AI_NAME'),
+    key: kind === 'gemini' ? envv('GEMINI_API_KEY') : envv('NEXORA_AI_API_KEY'),
+    base: (envv('NEXORA_AI_BASE_URL') || 'https://api.xkiro.com/v1').replace(/\/+$/, ''),
+    model: envv('NEXORA_AI_MODEL') || (kind === 'gemini' ? 'gemini-2.5-flash' : ''),
+    fallback: envv('NEXORA_AI_FALLBACK_MODEL'), agents: agentList(envv('NEXORA_AI_AGENTS')),
+    keyVar: kind === 'gemini' ? 'GEMINI_API_KEY' : 'NEXORA_AI_API_KEY', modelVar: 'NEXORA_AI_MODEL', baseVar: 'NEXORA_AI_BASE_URL'
+  });
+}
+function slotProvider(n) {
+  const p = `NEXORA_AI${n}_`;
+  const raw = { kind: envv(p + 'PROVIDER').toLowerCase(), key: envv(p + 'API_KEY'), base: envv(p + 'BASE_URL'), model: envv(p + 'MODEL'), fallback: envv(p + 'FALLBACK_MODEL'), name: envv(p + 'NAME'), agents: envv(p + 'AGENTS') };
+  if (!Object.values(raw).some(Boolean)) return null; // slot kosong
+  const kind = raw.kind === 'gemini' ? 'gemini' : 'openai-compatible';
+  return buildProvider({
+    id: `slot${n}`, kind, name: raw.name, key: raw.key || (kind === 'gemini' ? envv('GEMINI_API_KEY') : ''),
+    base: raw.base.replace(/\/+$/, ''), model: raw.model || (kind === 'gemini' ? 'gemini-2.5-flash' : ''),
+    fallback: raw.fallback, agents: agentList(raw.agents), keyVar: p + 'API_KEY', modelVar: p + 'MODEL', baseVar: p + 'BASE_URL'
+  });
+}
+// Daftar penyedia yang siap dipakai (chain) + masalah konfigurasi yang perlu diperbaiki (problems).
+export function aiConfig() {
+  const all = [mainProvider(), ...Array.from({ length: SLOTS }, (_, i) => slotProvider(i + 1)).filter(Boolean)];
+  const chain = all.filter(p => !p.problems.length);
+  const mainTouched = ['NEXORA_AI_PROVIDER', 'NEXORA_AI_API_KEY', 'NEXORA_AI_BASE_URL', 'NEXORA_AI_MODEL', 'NEXORA_AI_FALLBACK_MODEL'].some(envv);
+  const problems = all.filter(p => p.problems.length && (p.id !== 'utama' || mainTouched || !chain.length))
+    .flatMap(p => p.problems.map(x => `${p.id === 'utama' ? 'Utama' : 'Slot ' + p.id.slice(4)}: ${x}`));
+  return { chain, problems };
+}
+// Ringkasan aman untuk UI (tanpa key).
+export function aiStatus() {
+  const { chain, problems } = aiConfig();
+  return {
+    provider: chain[0]?.provider || null, model: chain[0]?.models[0] || null, fallbackModel: chain[0]?.models[1] || null,
+    keyDetected: chain.length > 0, problems,
+    chain: chain.map(p => ({ id: p.id, label: p.label, provider: p.provider, models: p.models, agents: p.agents }))
+  };
+}
 function checkAi() {
-  const ai = aiInfo();
-  const keyName = ai.provider === 'gemini' ? 'GEMINI_API_KEY' : 'NEXORA_AI_API_KEY';
-  if (!ai.key) throw httpError(503, `${keyName} belum diatur pada Environment Variables Netlify.`);
-  if (!ai.model) throw httpError(503, 'NEXORA_AI_MODEL wajib diisi untuk provider openai-compatible (contoh: qwen/qwen3.8-max:free).');
-  if (!MODEL_RE.test(ai.model) || (ai.fallback && !MODEL_RE.test(ai.fallback))) throw httpError(503, 'Format NEXORA_AI_MODEL / NEXORA_AI_FALLBACK_MODEL tidak valid.');
-  if (ai.provider === 'openai-compatible' && !/^https:\/\//i.test(ai.base)) throw httpError(503, 'NEXORA_AI_BASE_URL harus diawali https://');
-  return ai;
+  const { chain, problems } = aiConfig();
+  if (!chain.length) throw httpError(503, `Belum ada penyedia AI yang siap di Environment Variables Netlify. ${problems.join('; ')}.`.trim());
+  return { chain, problems, primaryModel: chain[0].models[0] };
 }
 
 // Pilih task berikutnya (atau task tertentu), cek dependensi & kuota harian, lalu klaim secara atomik.
@@ -56,7 +101,7 @@ export async function prepareRun({ taskId, projectId }) {
 
   const claimed = await transition(task, 'working', { started_at: nowIso(), finished_at: null, error: null }, task.agent_name);
   const attempts = await sbCount(`/rest/v1/nexora_agent_runs?task_id=eq.${enc(task.id)}&select=id`);
-  const [run] = await sb('/rest/v1/nexora_agent_runs', { method: 'POST', body: { task_id: task.id, agent_name: task.agent_name, attempt: attempts + 1, status: 'running', model: ai.model }, headers: REP });
+  const [run] = await sb('/rest/v1/nexora_agent_runs', { method: 'POST', body: { task_id: task.id, agent_name: task.agent_name, attempt: attempts + 1, status: 'running', model: ai.primaryModel }, headers: REP });
   return { runId: run.id, taskId: task.id, agent: task.agent_name, title: claimed.title, attempt: run.attempt, usedToday: used + 1, dailyLimit: limit };
 }
 
@@ -131,18 +176,36 @@ async function callOne(ai, model, prompt, timeoutMs) {
   } finally { clearTimeout(timer); }
 }
 
-// Model utama dulu; bila gagal sementara (timeout/404/429/5xx) dan ada NEXORA_AI_FALLBACK_MODEL, coba cadangan.
-async function callModel(prompt, timeoutMs) {
-  const ai = checkAi();
-  const models = [ai.model, ...(ai.fallback && ai.fallback !== ai.model ? [ai.fallback] : [])];
-  const started = Date.now(); let last;
-  for (const model of models) {
+// Urutan penyedia untuk satu Agent: slot khusus Agent itu dulu, lalu slot umum.
+function orderFor(chain, agent) {
+  const a = String(agent || '').toLowerCase();
+  const mine = chain.filter(p => p.agents.includes(a));
+  const general = chain.filter(p => !p.agents.length);
+  return mine.length || general.length ? [...mine, ...general] : chain;
+}
+const isTransient = t => t.timeout || t.status === 408 || t.status === 429 || t.status >= 500;
+// Coba tiap penyedia (dan model cadangannya) berurutan sampai ada yang menjawab.
+export async function callModel(prompt, timeoutMs, agent) {
+  const { chain } = checkAi();
+  const attempts = orderFor(chain, agent).flatMap(p => p.models.map(model => [p, model]));
+  // Percobaan yang bukan terakhir dibatasi ±70% anggaran waktu (minimal 15 dtk atau seluruh anggaran bila lebih kecil),
+  // supaya penyedia yang menggantung tidak menghabiskan waktu untuk cadangannya.
+  const cap = Math.max(Math.floor(timeoutMs * 0.7), Math.min(timeoutMs, 15000));
+  const started = Date.now(); const tried = []; let last;
+  for (let i = 0; i < attempts.length; i++) {
+    const [p, model] = attempts[i];
     const left = timeoutMs - (Date.now() - started);
     if (last && left < 3000) break;
-    try { return await callOne(ai, model, prompt, last ? left : timeoutMs); }
-    catch (e) { last = e; if (!(e.timeout || [404, 408, 429, 500, 502, 503, 504].includes(e.status))) throw e; }
+    const budget = i === attempts.length - 1 ? left : Math.min(left, cap);
+    try { const out = await callOne(p, model, prompt, budget); return { ...out, provider: p.label }; }
+    catch (e) { last = e; tried.push({ who: `${p.label} · ${model}`, status: e.status, timeout: !!e.timeout, message: e.message }); }
   }
-  throw last;
+  if (tried.length === 1) throw last; // satu percobaan saja: perilaku sama seperti v2.0.1
+  const err = new Error(clean(`Semua penyedia AI gagal: ${tried.map(t => `${t.who} (${t.status || (t.timeout ? 'timeout' : 'galat')})`).join('; ')}. Terakhir: ${last.message}`, 400));
+  // Kuota penuh di semua penyedia (tanpa kegagalan permanen) -> task kembali ke antrean tanpa memotong jatah retry.
+  if (tried.every(isTransient) && tried.some(t => t.status === 429)) err.status = 429;
+  else if (tried.every(isTransient) && tried.every(t => t.timeout)) err.timeout = true;
+  throw err;
 }
 
 // Dijalankan oleh agent-run (sinkron) atau agent-run-background. Aman terhadap pemanggilan ganda.
@@ -164,10 +227,10 @@ export async function finishRun(runId, { timeoutMs }) {
     const inbox = await sb(`/rest/v1/nexora_agent_messages?project_id=eq.${enc(projectId)}&status=in.(pending,delivered)&recipients=cs.${enc(`{${task.agent_name}}`)}&select=id,sender,kind,body&order=created_at.asc&limit=8`) || [];
     const memories = await relevantMemories(project, task);
 
-    const out = await callModel(buildPrompt({ project, task, step, reads, inbox, memories }), timeoutMs);
+    const out = await callModel(buildPrompt({ project, task, step, reads, inbox, memories }), timeoutMs, task.agent_name);
 
     if (inbox.length) await sb(`/rest/v1/nexora_agent_messages?id=in.(${inbox.map(m => m.id).join(',')})`, { method: 'PATCH', body: { status: 'read' } });
-    await sb(`/rest/v1/nexora_agent_runs?id=eq.${enc(run.id)}`, { method: 'PATCH', body: { status: 'succeeded', output: out.text, tokens: out.usage, model: out.model, finished_at: nowIso() } });
+    await sb(`/rest/v1/nexora_agent_runs?id=eq.${enc(run.id)}`, { method: 'PATCH', body: { status: 'succeeded', output: out.text, tokens: out.usage, model: out.provider ? `${out.provider} · ${out.model}` : out.model, finished_at: nowIso() } });
 
     // Elara (QC): kembalikan hanya tahap yang bermasalah.
     if (task.step_key === 'qc') {
