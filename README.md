@@ -1,4 +1,4 @@
-# NEXORA STUDIO v1.8.0 — Cloud Infrastructure
+# NEXORA STUDIO v1.9.0 — Cloud Infrastructure
 
 Mobile-friendly AI production-company workspace designed for Android browser workflows. v1.8.0 builds on the earlier virtual office, 11-Agent roster, AI Brain, Gemini integrations, supervised production pipeline, media labs, Video Composer, and Production Control.
 
@@ -241,3 +241,16 @@ Official references:
 **Security notes:** Never put `SUPABASE_SERVICE_ROLE_KEY` in `index.html`, `cloud.js`, public environment variables, screenshots, or messages. The service-role key bypasses Supabase Row Level Security, so only the server function may use it. The shared access code is a prototype gate and can be shared or leaked; rotate it if exposed. Use a long random code distinct from the video access code. Do not upload personal, confidential, or copyrighted files without permission. Keep database backups and understand provider limits/costs before enabling paid plans.
 
 **Known limitations:** the Cloud Center is optional and is not yet a full identity/authentication system. Existing localStorage/IndexedDB workspaces are not automatically migrated or bidirectionally synchronized. Production Control, Autonomous Studio run state, Video Composer projects, and AI outputs remain local unless separately exported. The JSON backup is an export only; automatic restore and scheduled backups are not included. Large media files are not supported by the 4 MB upload endpoint. Supabase setup, Netlify deployment, and credentials are required before cloud features work.
+
+
+## v1.9.0 — Agent Cloud Synchronization
+
+- AI Brain now includes manual Cloud Memory import and export controls.
+- Pull imports cloud memories into the local Agent Knowledge Vault and avoids duplicates using cloud IDs/content fingerprints.
+- Push uploads local memories that have not previously been linked to a cloud record; successfully uploaded items retain their cloud ID locally to prevent repeat uploads.
+- Imported cloud memories become available to the existing Context Pack Builder.
+- Cloud Sync uses the existing Netlify Function and the access code held in the current browser session; no service-role key is exposed to the frontend.
+- This is deliberate manual synchronization, not automatic background synchronization. Other local modules and Autonomous Studio pipeline outputs are not automatically synced.
+
+### Upgrade
+Deploy the complete contents of this version's `nexora-studio` folder to the existing Netlify site. Keep the existing Supabase schema and Environment Variables. No new SQL migration is required. After deploy, connect Cloud Center in the same browser tab, then open AI Brain and use **Ambil memori cloud** or **Kirim memori lokal**.
