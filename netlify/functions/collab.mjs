@@ -4,7 +4,7 @@ import {
   audit, getTask, getProject, loadGraph, transition, addMessage, promote, refreshProject,
   requestRevision, recoverStale, MAX_REVISIONS
 } from './lib/nexora.mjs';
-import { prepareRun, aiInfo } from './lib/runner.mjs';
+import { prepareRun, aiStatus } from './lib/runner.mjs';
 
 const enc = encodeURIComponent;
 const REP = { Prefer: 'return=representation' };
@@ -84,8 +84,7 @@ export default async (req) => {
     switch (String(b.action || '')) {
       case 'health': {
         await sb('/rest/v1/nexora_projects?select=id&limit=1');
-        const ai = aiInfo();
-        return json(200, { ok: true, version: '2.0.1', provider: ai.provider, model: ai.model || null, fallbackModel: ai.fallback || null, keyDetected: !!ai.key, dailyLimit: intEnv('NEXORA_DAILY_AI_LIMIT', 40, 1, 5000) });
+        return json(200, { ok: true, version: '2.0.2', ...aiStatus(), dailyLimit: intEnv('NEXORA_DAILY_AI_LIMIT', 40, 1, 5000) });
       }
       case 'project.create': return json(200, { project: await createProject(b) });
       case 'project.list': return json(200, { items: await sb('/rest/v1/nexora_projects?select=*&order=created_at.desc&limit=50') || [] });
