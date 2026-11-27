@@ -193,6 +193,10 @@ $('collab-msg-send')?.addEventListener('click', guard(async () => {
 }));
 document.querySelectorAll('[data-view="collab"]').forEach(b => b.addEventListener('click', guard(async () => {
   if (!code()) { note('Belum terhubung ke cloud. Buka Cloud Center dan masukkan kode akses terlebih dahulu.', 'error'); return; }
-  const h = await api('health'); note(`Terhubung · ${h.provider} · model ${h.model || '(belum diatur)'} · ${h.keyDetected ? 'API key terdeteksi' : 'API key BELUM diatur'} · batas harian ${h.dailyLimit} panggilan.`, h.keyDetected && h.model ? 'success' : 'error');
+  const h = await api('health');
+  const chain = Array.isArray(h.chain) ? h.chain : [];
+  const route = chain.map(c => `${c.label} (${c.models[0]}${c.agents?.length ? ' untuk ' + c.agents.join('/') : ''})`).join(' → ') || '(belum ada)';
+  const issues = h.problems?.length ? ` Perlu diperbaiki: ${h.problems.join('; ')}.` : '';
+  note(`Terhubung · ${chain.length} penyedia AI: ${route} · batas harian ${h.dailyLimit} panggilan.${issues}`, chain.length ? 'success' : 'error');
   await loadProjects();
 })));

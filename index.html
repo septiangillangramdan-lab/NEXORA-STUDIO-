@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#101827" />
-  <title>NEXORA STUDIO v2.0.1 — Autonomous Multi-Agent Collaboration</title>
+  <title>NEXORA STUDIO v2.0.2 — Autonomous Multi-Agent Collaboration</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -417,7 +417,7 @@
         <div class="prototype-note"><b>Perlu diketahui:</b> ini adalah CEO Memory lokal pada browser. Belum tersinkron ke cloud dan belum otomatis dibaca oleh model AI.</div>
       </section>
       <section class="content cloud-content" id="cloud-view" hidden>
-        <div class="welcome-row"><div><p class="welcome-kicker">NEXORA · CLOUD INFRASTRUCTURE</p><h2>Cloud <em>Center.</em></h2><p class="muted">Hubungkan ruang kerja NEXORA ke Supabase agar memori, tugas, log, dan aset dapat disimpan di cloud.</p></div><div class="date-chip">☁ <span>CLOUD SYSTEM · v2.0.1</span></div></div>
+        <div class="welcome-row"><div><p class="welcome-kicker">NEXORA · CLOUD INFRASTRUCTURE</p><h2>Cloud <em>Center.</em></h2><p class="muted">Hubungkan ruang kerja NEXORA ke Supabase agar memori, tugas, log, dan aset dapat disimpan di cloud.</p></div><div class="date-chip">☁ <span>CLOUD SYSTEM · v2.0.2</span></div></div>
         <div class="production-notice"><b>Cloud connection is optional</b><span>Frontend tidak menyimpan service-role key. Koneksi dilakukan melalui Netlify Functions. Gunakan kode akses bersama yang tidak mudah ditebak. Supabase dan Netlify memerlukan akun serta konfigurasi sendiri; penggunaan storage/database mengikuti kuota dan kebijakan provider.</span></div>
         <section class="panel cloud-connect-panel">
           <div class="panel-heading"><div><h3>Cloud connection</h3><p>Masukkan kode akses yang disiapkan pada Environment Variables Netlify.</p></div><span class="draft-pill" id="cloud-state-pill">OFFLINE</span></div>
@@ -449,11 +449,11 @@
             <button class="primary-button full-button" id="cloud-log-add" type="button">＋ Tambah activity log</button><button class="secondary-button full-button" id="cloud-refresh" type="button">↻ Sinkronkan semua data</button><button class="secondary-button full-button" id="cloud-backup" type="button">↓ Ekspor cloud backup JSON</button><div class="cloud-record-list" id="cloud-log-list"><div class="empty-timeline">Hubungkan cloud untuk memuat data.</div></div>
           </section>
         </div>
-        <div class="prototype-note"><b>Keamanan & batas v2.0.1:</b> ini adalah konektor cloud awal dengan satu kode akses bersama, bukan sistem akun multi-user. Buat tabel dan bucket menggunakan SQL yang disertakan. Jangan memasukkan service-role key ke browser atau membagikan kode akses. Backup JSON diunduh ke perangkat. Sinkronisasi memori Agent tersedia secara manual melalui AI Brain; sinkronisasi otomatis untuk seluruh modul localStorage belum diaktifkan. Jangan unggah data pribadi atau file yang tidak kamu miliki.</div>
+        <div class="prototype-note"><b>Keamanan & batas v2.0.2:</b> ini adalah konektor cloud awal dengan satu kode akses bersama, bukan sistem akun multi-user. Buat tabel dan bucket menggunakan SQL yang disertakan. Jangan memasukkan service-role key ke browser atau membagikan kode akses. Backup JSON diunduh ke perangkat. Sinkronisasi memori Agent tersedia secara manual melalui AI Brain; sinkronisasi otomatis untuk seluruh modul localStorage belum diaktifkan. Jangan unggah data pribadi atau file yang tidak kamu miliki.</div>
       </section>
 
       <section class="content collab-content" id="collab-view" hidden>
-        <div class="welcome-row"><div><p class="welcome-kicker">NEXORA · MULTI-AGENT COLLABORATION</p><h2>Agent <em>Room.</em></h2><p class="muted">CEO memberi brief, Arka dan tim bekerja lewat antrean task bersama, saling kirim pesan, dan menunggu persetujuan Anda.</p></div><div class="date-chip">⇄ <span>COLLAB · v2.0.1</span></div></div>
+        <div class="welcome-row"><div><p class="welcome-kicker">NEXORA · MULTI-AGENT COLLABORATION</p><h2>Agent <em>Room.</em></h2><p class="muted">CEO memberi brief, Arka dan tim bekerja lewat antrean task bersama, saling kirim pesan, dan menunggu persetujuan Anda.</p></div><div class="date-chip">⇄ <span>COLLAB · v2.0.2</span></div></div>
         <div class="production-notice"><b>Hasil Agent = dokumen teks</b><span>Tahap ini menghasilkan rencana, naskah, shot list, dan arahan suara dalam bentuk teks. Belum membuat file gambar, audio, atau video. Setiap langkah memakai kuota gratis penyedia AI Anda (Gemini atau API kompatibel OpenAI); batasnya diatur di Netlify (NEXORA_DAILY_AI_LIMIT).</span></div>
         <p class="composer-hint cloud-status" id="collab-status" aria-live="polite">Buka menu ini setelah Cloud Center terhubung.</p>
 

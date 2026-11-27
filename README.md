@@ -291,3 +291,14 @@ Official references:
 
 ### Upgrade
 Deploy the complete contents of this version's `nexora-studio` folder to the existing Netlify site. Keep the existing Supabase schema and Environment Variables. No new SQL migration is required. After deploy, connect Cloud Center in the same browser tab, then open AI Brain and use **Ambil memori cloud** or **Kirim memori lokal**.
+
+
+## v2.0.2 — Banyak penyedia AI untuk Agent Room
+
+- **Rantai penyedia:** penyedia utama (`NEXORA_AI_*` / `GEMINI_API_KEY`) lalu slot `NEXORA_AI1_*` … `NEXORA_AI6_*`. Bila satu penyedia gagal (kuota 429, timeout, key salah, jawaban kosong), Agent Room otomatis mencoba berikutnya. Lihat `netlify-env.example.txt`.
+- **Slot per Agent (opsional):** `NEXORA_AI{n}_AGENTS=Kirana,Elara` menjadikan slot itu pilihan pertama untuk Agent tersebut dan tidak dipakai Agent lain.
+- **Kuota:** bila semua penyedia kena 429, task kembali ke antrean tanpa memotong jatah retry. Bila ada kegagalan permanen (mis. key salah/401), error menyebut penyedia mana yang gagal. `NEXORA_DAILY_AI_LIMIT` menghitung per run (satu task), bukan per penyedia yang dicoba.
+- **Anggaran waktu:** percobaan yang bukan terakhir dibatasi ±70% waktu (minimal 15 dtk atau seluruh anggaran bila lebih kecil) agar penyedia yang menggantung tidak menghabiskan waktu cadangannya.
+- **Status:** baris status Agent Room menampilkan urutan penyedia dan model, serta konfigurasi slot yang perlu diperbaiki. Key tidak pernah dikirim ke browser.
+- **Perbaikan:** `cloud.js` pada paket v2.0.1 terkirim kosong (0 byte) sehingga Cloud Center tidak berfungsi; v2.0.2 membangun ulang file tersebut.
+- **Belum termasuk:** tombol "Hasil proyek", perbaikan prompt Kirana/Elara, dan pembuatan video (direncanakan v2.0.3 dan seterusnya). Hasil Agent masih dokumen teks.

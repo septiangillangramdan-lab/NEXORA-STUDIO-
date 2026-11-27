@@ -1,4 +1,4 @@
-// NEXORA STUDIO — Cloud Center v2.0.1 (dibangun ulang; file asli terkirim kosong).
+// NEXORA STUDIO — Cloud Center v2.0.2 (dibangun ulang; file asli terkirim kosong).
 // Semua akses lewat Netlify Function `cloud-data`. Tidak ada secret/service-role key di browser.
 // Kode akses hanya disimpan di sessionStorage (hilang saat tab ditutup); modul lain (AI Brain, Agent Room) membacanya dari sana.
 const $ = id => document.getElementById(id);
@@ -216,7 +216,7 @@ function backup() {
     if (!getCode()) throw new Error('Hubungkan cloud terlebih dahulu.');
     const { failed, firstError } = await loadAll();
     if (failed.length) throw new Error(`Backup dibatalkan karena gagal memuat: ${failed.join(', ')}. ${firstError}`.trim());
-    const blob = new Blob([JSON.stringify({ app: 'NEXORA STUDIO', version: '2.0.1', exportedAt: new Date().toISOString(), ...data }, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify({ app: 'NEXORA STUDIO', version: '2.0.2', exportedAt: new Date().toISOString(), ...data }, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = el('a'); a.href = url; a.download = `nexora-cloud-backup-${new Date().toISOString().slice(0, 10)}.json`;
     document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1500);

@@ -25,3 +25,31 @@ NEXORA_SYNC_TIMEOUT_MS=8500
 # NEXORA_AI_API_KEY=isi_key_dari_dashboard_penyedia
 # NEXORA_AI_MODEL=qwen/qwen3.8-max:free
 # NEXORA_AI_FALLBACK_MODEL=cohere/command-a
+
+# NEXORA v2.0.2 — BANYAK penyedia AI untuk Agent Room (rantai fallback otomatis)
+# Urutan dicoba: penyedia UTAMA (variabel NEXORA_AI_* di atas atau GEMINI_API_KEY), lalu slot 1, 2, 3 ... sampai 6.
+# Bila satu penyedia gagal (kuota 429, timeout, key salah, jawaban kosong), Agent Room otomatis pindah ke berikutnya.
+# Satu slot = tiga variabel wajib (BASE_URL, API_KEY, MODEL). Semua key diisi HANYA di Netlify, jangan di chat/screenshot.
+#
+# Slot 1 — contoh: OpenRouter
+# NEXORA_AI1_NAME=OpenRouter
+# NEXORA_AI1_BASE_URL=https://openrouter.ai/api/v1
+# NEXORA_AI1_API_KEY=isi_key_openrouter
+# NEXORA_AI1_MODEL=google/gemma-4-31b-it:free
+# NEXORA_AI1_FALLBACK_MODEL=            (opsional: model cadangan pada penyedia yang sama)
+#
+# Slot 2 — contoh: Groq (kompatibel OpenAI)
+# NEXORA_AI2_NAME=Groq
+# NEXORA_AI2_BASE_URL=https://api.groq.com/openai/v1
+# NEXORA_AI2_API_KEY=isi_key_groq
+# NEXORA_AI2_MODEL=isi_id_model_dari_dashboard_groq
+#
+# Slot 3 — Gemini (memakai GEMINI_API_KEY bila NEXORA_AI3_API_KEY dikosongkan)
+# NEXORA_AI3_PROVIDER=gemini
+# NEXORA_AI3_MODEL=gemini-2.5-flash
+#
+# Opsional: khususkan slot untuk Agent tertentu (Agent lain tidak memakainya). Contoh: slot ini jadi pilihan pertama untuk naskah dan QC
+# NEXORA_AI2_AGENTS=Kirana,Elara
+#
+# Slot 4 s.d. 6 memakai pola yang sama (NEXORA_AI4_*, NEXORA_AI5_*, NEXORA_AI6_*). Slot yang setengah terisi atau salah format
+# dilewati dan dilaporkan di baris status Agent Room, tanpa menghentikan penyedia lain.
