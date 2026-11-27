@@ -1,5 +1,5 @@
 import { timingSafeEqual, randomUUID } from 'node:crypto';
-const json=(statusCode,body)=>({statusCode,headers:{'Content-Type':'application/json','Cache-Control':'no-store'},body:JSON.stringify(body)});
+const json=(statusCode,body)=>new Response(JSON.stringify(body),{status:statusCode,headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});
 function authorized(value){const expected=process.env.NEXORA_CLOUD_ACCESS_CODE||'';const a=Buffer.from(String(value||''));const b=Buffer.from(expected);return !!expected&&a.length===b.length&&timingSafeEqual(a,b);}
 function config(){const url=(process.env.SUPABASE_URL||'').replace(/\/$/,'');const key=process.env.SUPABASE_SERVICE_ROLE_KEY||'';if(!url||!key)throw new Error('SUPABASE_URL dan SUPABASE_SERVICE_ROLE_KEY harus diatur di Netlify.');return {url,key};}
 async function sb(path,{method='GET',body,headers={}}={}){const {url,key}=config();const res=await fetch(`${url}${path}`,{method,headers:{apikey:key,Authorization:`Bearer ${key}`,...(body!==undefined?{'Content-Type':'application/json'}:{}),...headers},body:body===undefined?undefined:JSON.stringify(body)});const data=await res.json().catch(()=>null);if(!res.ok)throw new Error(data?.message||data?.error||`Supabase error ${res.status}`);return data;}
@@ -48,4 +48,3 @@ export default async (req)=>{
   return json(400,{error:'Action tidak dikenal.'});
  }catch(e){return json(500,{error:String(e.message||'Cloud operation gagal.').slice(0,400)});}
 };
-                                                                                                                                                                                                                                                                                                                                 
